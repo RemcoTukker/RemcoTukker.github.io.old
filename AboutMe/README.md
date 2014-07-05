@@ -7,5 +7,5 @@ Testing making a post in markdown
 more text
 
 link: [google](http://www.google.com)
-link2: [about the website](aboutsite)
+link2: [about the website](../AboutWebsite)
 
