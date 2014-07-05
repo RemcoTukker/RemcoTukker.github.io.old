@@ -19,7 +19,7 @@ $.get(graphUrl, function(data, status, jqxhr){
     //TODO: test for errors and so on
     
     //draw the graph :-)
-    graph = new vis.Graph($("#graphcontainer").get(0), data);
+    graph = new vis.Graph($("#graphcontainer").get(0), {dot: data});
 
     //add links to pages!
     graph.on('select', function(props) {
