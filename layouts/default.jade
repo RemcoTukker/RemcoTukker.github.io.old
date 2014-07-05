@@ -2,19 +2,25 @@ doctype html
 html
   block vars
   head
-    title #{pageTitle} &mdash; @blog
+    title #{pageTitle} &mdash; Remco Tukker
     // main styles
     link(href="/static/css/styles.css", rel="stylesheet")
+    script(src="/static/js/jquery-2.1.1.js")
+    script(src="/static/js/vis.js")
     block styles
   body
-    .header
-      a(href="/") blog 
-    .container
-      block content
-    .footer
+    #graphcontainer
+      block navigation
+    #maincontainer
+      #sidebarcontainer
+        block sidebar
+      #contentcontainer
+        block content
+
     // main javascript
-    script(src="/static/js/scripts.js")
+    script(src="/static/js/navigation.js")
     block scripts
     block analytics
       script.
       // google analytics code, etc...
+

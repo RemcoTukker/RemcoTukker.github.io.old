@@ -30,34 +30,8 @@ module.exports = function(grunt) {
             extDot: 'first'   // Extensions in filenames begin after the first dot
           },
         ]
-
-
-//          "*": ["**/*.jade", "!layouts/*.jade"]
- //       }
       }
     },
-  /*  jade: {
-      options: {
-        pretty: true,
-        files: {
-          "*": ["** /*.jade", "!layouts/*.jade"]
-        }
-      },
-      debug: {
-        options: {
-          locals: {
-            livereload: true
-          }
-        }
-      },
-      publish: {
-        options: {
-          locals: {
-            livereload: false
-          }
-        }
-      }
-    }, */
     web: {
       options: {
         port: 8001

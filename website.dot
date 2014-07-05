@@ -1,0 +1,7 @@
+digraph website {
+  0 [label="MAS", label2="blurp"];
+  1 [label="ALife", label2="blurp"];
+  2 [label="http://www.google.com", label2="blurp"];
+  1 -> 0;
+  1 -> 2;
+}
