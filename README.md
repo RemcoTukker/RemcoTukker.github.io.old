@@ -1,3 +1,3 @@
 ####Posts
 
-[First post](first-post)
+[test post](test-post)

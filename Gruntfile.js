@@ -7,15 +7,40 @@ module.exports = function(grunt) {
         livereload: true
       },
       jade: {
-        tasks: ["jade:debug"],
+        tasks: ["jade"],
         files: ["**/*.jade", "**/*.md", "!layouts/*.jade"]
       }
     },
     jade: {
+      debug: {
+        options: {
+          data: {
+            debug:true
+          },
+          pretty:true
+        },
+        files: [
+          {
+            expand: true,     // Enable dynamic expansion.
+            //cwd: 'lib/',      // Src matches are relative to this path.
+            src: ['**/*.jade', '!layouts/*.jade'], // Actual pattern(s) to match.
+            //flatten: true,            
+            //dest: 'build/',   // Destination path prefix.
+            ext: '.html',   // Dest filepaths will have this extension.
+            extDot: 'first'   // Extensions in filenames begin after the first dot
+          },
+        ]
+
+
+//          "*": ["**/*.jade", "!layouts/*.jade"]
+ //       }
+      }
+    },
+  /*  jade: {
       options: {
         pretty: true,
         files: {
-          "*": ["**/*.jade", "!layouts/*.jade"]
+          "*": ["** /*.jade", "!layouts/*.jade"]
         }
       },
       debug: {
@@ -32,7 +57,7 @@ module.exports = function(grunt) {
           }
         }
       }
-    },
+    }, */
     web: {
       options: {
         port: 8001
@@ -41,10 +66,10 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-jade-tasks');
+  grunt.loadNpmTasks('grunt-contrib-jade');
 
-  grunt.registerTask('default', ['jade:debug', 'web']);
-  grunt.registerTask('publish', ['jade:publish']);
+  grunt.registerTask('default', ['jade', 'web', 'watch']);
+  grunt.registerTask('publish', ['jade']);
 
   grunt.registerTask('web', 'Start web server...', function() {
     var options = this.options();
@@ -58,7 +83,7 @@ module.exports = function(grunt) {
     //).listen(options.port);
     console.log('http://localhost:%s', options.port);
 
-    grunt.task.run(["watch:jade"]);
+    //grunt.task.run(["watch:jade"]);
   });
 
 };
