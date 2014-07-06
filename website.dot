@@ -1,9 +1,28 @@
 digraph website {
-  0 [label="/OnOnIntelligence/", label2="more detailed information"];
-  1 [label="/NonPhotorealisticRendering/", label2="more detailed information"];
-  2 [label="/FoodDistribution/", label2="more detailed information"];
-  3 [label="/DeepLearningAudio/", label2="more detailed information"];
-  4 [label="/Capitalism/", label2="more detailed information"];
-  5 [label="/AboutWebsite/", label2="more detailed information"];
-  6 [label="/AboutMe/", label2="more detailed information"];
+  0 [label="http://localhost:8001/AboutWebsite/", label2="more detailed information"];
+  1 [label="http://localhost:8001/AboutMe/", label2="more detailed information"];
+  2 [label="https://github.com/RemcoTukker/RemcoTukker.github.io", label2="more detailed information"];
+  3 [label="http://there4development.com/markdown-resume/", label2="more detailed information"];
+  4 [label="http://www.github.com", label2="more detailed information"];
+  5 [label="http://visjs.org", label2="more detailed information"];
+  6 [label="http://nodejs.org", label2="more detailed information"];
+  7 [label="http://gruntjs.org", label2="more detailed information"];
+  8 [label="http://rhrn.github.io/", label2="more detailed information"];
+  9 [label="http://jquery.com", label2="more detailed information"];
+  10 [label="http://localhost:8001/ArtificialIntelligence/", label2="more detailed information"];
+  11 [label="http://www.almende.org", label2="more detailed information"];
+  12 [label="http://www.dobots.nl", label2="more detailed information"];
+  0 -> 1;
+  0 -> 2;
+  0 -> 3;
+  0 -> 4;
+  0 -> 5;
+  0 -> 6;
+  0 -> 7;
+  0 -> 8;
+  0 -> 9;
+  1 -> 0;
+  1 -> 10;
+  1 -> 11;
+  1 -> 12;
 }
