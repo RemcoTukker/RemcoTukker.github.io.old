@@ -1,7 +1,9 @@
 digraph website {
-  0 [label="MAS", label2="blurp"];
-  1 [label="ALife", label2="blurp"];
-  2 [label="http://www.google.com", label2="blurp"];
-  1 -> 0;
-  1 -> 2;
+  0 [label="/OnOnIntelligence/", label2="more detailed information"];
+  1 [label="/NonPhotorealisticRendering/", label2="more detailed information"];
+  2 [label="/FoodDistribution/", label2="more detailed information"];
+  3 [label="/DeepLearningAudio/", label2="more detailed information"];
+  4 [label="/Capitalism/", label2="more detailed information"];
+  5 [label="/AboutWebsite/", label2="more detailed information"];
+  6 [label="/AboutMe/", label2="more detailed information"];
 }
