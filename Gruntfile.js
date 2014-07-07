@@ -82,8 +82,8 @@ module.exports = function(grunt) {
     });
 
     // now send our crawler to check all these webpages and return us a graph describing them
-    var graphbuilder = require('./tools/graphbuilding.js');
-    graphbuilder.processUrls(queue, 1, function(result) { // depth of one: dont crawl deeper
+    var minicrawler = require('./tools/minicrawler.js');
+    minicrawler.processUrls(queue, 1, function(result) { // depth of one: dont crawl deeper
 
         //now transform the result (linksObject) to the DOT string
         var datastring = 'digraph website {\n';

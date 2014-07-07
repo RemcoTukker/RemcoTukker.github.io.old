@@ -2,7 +2,9 @@ doctype html
 html
   block vars
   head
+    meta(charset='utf-8')
     title #{pageTitle} &mdash; Remco Tukker
+    block description
     // main styles
     link(href="/static/css/styles.css", rel="stylesheet")
     script(src="/static/js/jquery-2.1.1.js")

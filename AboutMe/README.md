@@ -2,10 +2,15 @@
 
 Available for new projects from November 2014!
 
+### Contact
+
+Just drop me an email at 0remco /@/ gmail \\.\\ com (remove slashes, backslashes and spaces, of course).
+
 ### What I Do Best
 
-* Analysis: modeling complex or distributed systems, business and user requirements, operations research
-* Software: programming in C++ (STL), C (MPI), Java (JBoss), JavaScript (NodeJS, JQuery), architecture of distributed systems, and of course, thorough documentation of code
+* Analysis: modeling complex or distributed systems, requirements (user, functional, business), operations research
+* Software: programming in C++ (STL), C (MPI), Java (Android, JBoss), JavaScript (NodeJS, JQuery), Matlab, architecture of distributed systems, and of course, thorough documentation of code
+* Machine Learning: Artificial Neural Networks, Unsupervised Learning, Evolutionary Algorithms
 
 ### Current Projects
 

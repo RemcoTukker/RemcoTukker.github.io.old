@@ -1,6 +1,6 @@
 # This Website
 
-__CLIENT SIDE NAVIGATION STILL UNDER CONSTRUCTION__
+__CLIENT SIDE NAVIGATION STILL UNDER CONSTRUCTION!__
 
 This website is simply my braindump: the place where I organize my thoughts and projects both for myself and the rest of the world. In case you would like to discuss one of the topics I have an opinion on, or just simply want to report a broken link, etc, feel free to contact me (see [About Me](../AboutMe/) for contact details).
 
@@ -18,8 +18,9 @@ The javascript and css of this website is open source, licensed with (....). The
 
 #### Todo
 
+* Custom 404
 * Loading and unloading Javascript and CSS on different pages dynamically
-* Using [Markdown Resume Builder](http://there4development.com/markdown-resume/) to present my resume in a prettier way
+* Using [Markdown Resume Builder](http://there4development.com/markdown-resume/) to present my resume in a prettier way (or [JSON resume](http://jsonresume.org) which I ran into today)
 * Improving code: documentation, functionality of mini-crawler (make it a proper crawler!), ah, just search for TODO in the codebase and you'll find the whole list!
 
 ### Acknowledgements
