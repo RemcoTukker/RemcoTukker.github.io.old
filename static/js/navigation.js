@@ -102,6 +102,8 @@ var breadcrumbs = {
     startTime: new Date(),    
     hist: [{location:location.href, time:0}],
     addPage: function(url) {
+        // TODO: dont add page if its already the last entry in the history
+
         var curTime = new Date();
         var seconds = Math.round((curTime.getTime() - this.startTime.getTime())/1000);
         this.hist.push({location:url, time:seconds});

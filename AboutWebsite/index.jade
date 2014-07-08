@@ -1,7 +1,10 @@
 extends ../layouts/default
 
+block description
+  meta(name='description', content='General and technical information about this website')
+
 block vars
-  - var pageTitle = 'About This Website'
+  - var pageTitle = 'About Website'
 
 block content
   include:md README.md
