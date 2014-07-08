@@ -1,3 +1,3 @@
 ####Posts
 
-[test post](AboutMe)
+[test post](AboutMe/)

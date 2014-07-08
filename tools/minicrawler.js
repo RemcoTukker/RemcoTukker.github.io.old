@@ -6,6 +6,7 @@ exports.processUrls = function(seedUrls, depth, callback) {
     // TODO: (to make this a completely functional crawler)
     // * Improve linkchecker function
     // * Add optional postprocessing to remove 301 redirects (by replacing the original url with the url that the redirect points to)
+    // * Add some safety checks for length of description and so on.. dont want to have a 1 Mbyte string there..
     // * Refactor next() / process() structure? its kind of ugly now?
     // * Use a DB for storing results instead of doing everything in memory
     // * See if we should deal more carefully with statuscodes (1xx and 5xx range and perhaps specific codes in 2xx, 3xx or 4xx range)
@@ -43,7 +44,7 @@ exports.processUrls = function(seedUrls, depth, callback) {
             cb(null, null, null);
             return;
         }
-        requestor.get(url, function(res) {
+        requestor.get(url, function(res) { // do the actual http get request
             var data = "";
             res.on('data', function (chunk) { data += chunk; });
             res.on("end", function() { cb(res.statusCode, data, res.headers); });
@@ -70,21 +71,27 @@ exports.processUrls = function(seedUrls, depth, callback) {
 
         // TODO: filter out mailto (and other stuff) and # hrefs
         // TODO: detect absolute links properly instead of relying on : not being in latter part of url
-        // TODO: also deal with the horrible relative links that start with /
 
         if ( link.indexOf(':') != -1) return link; // absolute link
         
-        // assuming we have a relative link now
-        var stack = currentUrl.split('/');
-        var parts = link.split('/');
-        stack.pop(); //remove current file name (or empty string)
-        for (var i = 0; i < parts.length; i++) {
-            if (parts[i] == ".") continue;
-            if (parts[i] == "..") stack.pop();
-            else stack.push(parts[i]);
+        // assuming we have a relative link now, turn it into an absolute link
+        if (link.charAt(0) == '/') { 
+            //first / after the 8th char (third slash in total) should be the end of the hostname for both http and https,
+            // because hostname should at least be one char long..
+            var thirdslash = currentUrl.indexOf('/', 8);
+            var hostname = (thirdslash != -1) ? currentUrl.substring(0, thirdslash) : currentUrl;
+            return hostname + link;
+        } else {   
+            var stack = currentUrl.split('/');
+            var parts = link.split('/');
+            stack.pop(); //remove current file name (or empty string)
+            for (var i = 0; i < parts.length; i++) {
+                if (parts[i] == ".") continue;
+                if (parts[i] == "..") stack.pop();
+                else stack.push(parts[i]);
+            }
+            return stack.join('/');
         }
-        completeLink = stack.join('/');
-        return completeLink;
     }
 
     // then, the function that will be called for each URL and that will process the results
@@ -109,21 +116,21 @@ exports.processUrls = function(seedUrls, depth, callback) {
                 case 2: // success. eg 200 OK
                     linksObject[target.url] = {statuscode:statuscode, description: '', title: '', links:{}};
                     var $ = cheerio.load(htmlpage);
-                    $('title', 'head').each(function(i, elem) { // kinda ugly, but works...
+                    $('title', 'head').each(function(i, elem) { // extract the title of the page; kinda ugly, but works...
                         if (typeof elem.children[0] !== 'undefined') linksObject[target.url].title = elem.children[0].data; 
                     }); 
-                    $('meta', 'head').each(function(i, elem) { 
+                    $('meta', 'head').each(function(i, elem) { // extract the description of the page
                         if (typeof elem.attribs.name !== 'undefined' && elem.attribs.name.toLowerCase() == 'description') {
                             linksObject[target.url].description = elem.attribs.content; 
                         }
                     });
-                    $('a').each(function(i, elem) {  
-                        var absLink = linkChecker(target.url, elem.attribs.href);
+                    $('a').each(function(i, elem) { // extract all the links out of the page (TODO: maybe also extract img links)
+                        var absLink = linkChecker(target.url, elem.attribs.href); // sanitize the link
                         if (absLink == '') return;
                         if (!linksObject[target.url].links[absLink]) linksObject[target.url].links[absLink] = 0; // works cause value is always 1 or larger
-                        linksObject[target.url].links[absLink]++;
+                        linksObject[target.url].links[absLink]++; // link from target.url page to absLink page, so increase the counter
                         if (target.depth < depth) {
-                            queue.push({url:absLink, depth:target.depth + 1}); 
+                            queue.push({url:absLink, depth:target.depth + 1}); // enqueue the absLink url if we didnt reach depth threshold yet
                         }
                     });
                     // here you could add more processing code dealing with the content of a website
@@ -131,12 +138,12 @@ exports.processUrls = function(seedUrls, depth, callback) {
                     break;
                 case 3: // redirect, eg 301 permanent redirect from /about => /about/
                     var entryLinks = {};
-                    entryLinks[headers.location] = 1;
+                    entryLinks[headers.location] = 1; // store page to which we're redirected as a link
                     linksObject[target.url] = {statuscode:statuscode, title:'3xx Redirect', links:entryLinks};
                     queue.push({url:headers.location, depth:target.depth}); // dont increase depth with a redirect; seems more intuitive 
                     break;
                 case 4: // client error, eg 404 not found
-                    linksObject[target.url] = {statuscode:statuscode, title:'4xx Client Error'};
+                    linksObject[target.url] = {statuscode:statuscode, title:'4xx Client Error', links:{}};
                     break;
                 default: // 0 (result from error in get function), 1xx informational, 5xx server error
                     break;

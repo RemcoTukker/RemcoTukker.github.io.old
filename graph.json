@@ -1,0 +1,253 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "label": "DoBots | Home",
+      "title": "",
+      "url": "http://www.dobots.nl",
+      "statuscode": 200
+    },
+    {
+      "id": 1,
+      "label": "3xx Redirect",
+      "url": "http://www.almende.org",
+      "statuscode": 301
+    },
+    {
+      "id": 2,
+      "label": "jQuery",
+      "title": "jQuery: The Write Less, Do More, JavaScript Library",
+      "url": "http://jquery.com",
+      "statuscode": 200
+    },
+    {
+      "id": 3,
+      "label": "Home — @rhrn",
+      "title": "",
+      "url": "http://rhrn.github.io/",
+      "statuscode": 200
+    },
+    {
+      "id": 4,
+      "label": "Almende - Self-organiz...",
+      "title": "",
+      "url": "http://www.almende.com/home",
+      "statuscode": 200
+    },
+    {
+      "id": 5,
+      "label": "node.js",
+      "title": "",
+      "url": "http://nodejs.org",
+      "statuscode": 200
+    },
+    {
+      "id": 6,
+      "label": "vis.js | a dynamic, br...",
+      "title": "vis.js is a dynamic, browser-based visualization library",
+      "url": "http://visjs.org",
+      "statuscode": 200
+    },
+    {
+      "id": 7,
+      "label": "3xx Redirect",
+      "url": "http://gruntjs.org",
+      "statuscode": 301
+    },
+    {
+      "id": 8,
+      "label": "3xx Redirect",
+      "url": "http://www.github.com",
+      "statuscode": 301
+    },
+    {
+      "id": 9,
+      "label": "3xx Redirect",
+      "url": "https://www.github.com/",
+      "statuscode": 301
+    },
+    {
+      "id": 10,
+      "label": "GitHub · Build softwar...",
+      "title": "Build software better, together.",
+      "url": "https://github.com/",
+      "statuscode": 200
+    },
+    {
+      "id": 11,
+      "label": "Grunt 中文社区",
+      "title": "Grunt中文社区是由网友发起的Grunt.js中文交流社区，关注前端构建工具Grunt.js的应用推广。",
+      "url": "http://www.gruntjs.org/",
+      "statuscode": 200
+    },
+    {
+      "id": 12,
+      "label": "Json Resume",
+      "title": "",
+      "url": "http://jsonresume.org",
+      "statuscode": 200
+    },
+    {
+      "id": 13,
+      "label": "Markdown Resume Builde...",
+      "title": "",
+      "url": "http://there4development.com/markdown-resume/",
+      "statuscode": 200
+    },
+    {
+      "id": 14,
+      "label": "RemcoTukker/RemcoTukke...",
+      "title": "RemcoTukker.github.io - github hosted personal website",
+      "url": "https://github.com/RemcoTukker/RemcoTukker.github.io",
+      "statuscode": 200
+    },
+    {
+      "id": 15,
+      "label": "4xx Client Error",
+      "url": "/OnOnIntelligence/",
+      "statuscode": 404
+    },
+    {
+      "id": 16,
+      "label": "4xx Client Error",
+      "url": "/NonPhotorealisticRendering/",
+      "statuscode": 404
+    },
+    {
+      "id": 17,
+      "label": "4xx Client Error",
+      "url": "/Games/",
+      "statuscode": 404
+    },
+    {
+      "id": 18,
+      "label": "4xx Client Error",
+      "url": "/FoodDistribution/",
+      "statuscode": 404
+    },
+    {
+      "id": 19,
+      "label": "4xx Client Error",
+      "url": "/DeepLearningAudio/",
+      "statuscode": 404
+    },
+    {
+      "id": 20,
+      "label": "4xx Client Error",
+      "url": "/Capitalism/",
+      "statuscode": 404
+    },
+    {
+      "id": 21,
+      "label": "About This Website — R...",
+      "title": "",
+      "url": "/AboutWebsite/",
+      "statuscode": 200
+    },
+    {
+      "id": 22,
+      "label": "First post title — Rem...",
+      "title": "Resume and contact information of Remco Tukker",
+      "url": "/AboutMe/",
+      "statuscode": 200
+    },
+    {
+      "id": 23,
+      "label": "4xx Client Error",
+      "url": "/ArtificialIntelligence/",
+      "statuscode": 404
+    }
+  ],
+  "edges": [
+    {
+      "from": "1",
+      "to": "4",
+      "style": "arrow-center"
+    },
+    {
+      "from": "7",
+      "to": "11",
+      "style": "arrow-center"
+    },
+    {
+      "from": "8",
+      "to": "9",
+      "style": "arrow-center"
+    },
+    {
+      "from": "9",
+      "to": "10",
+      "style": "arrow-center"
+    },
+    {
+      "from": "21",
+      "to": "2",
+      "style": "arrow-center"
+    },
+    {
+      "from": "21",
+      "to": "3",
+      "style": "arrow-center"
+    },
+    {
+      "from": "21",
+      "to": "5",
+      "style": "arrow-center"
+    },
+    {
+      "from": "21",
+      "to": "6",
+      "style": "arrow-center"
+    },
+    {
+      "from": "21",
+      "to": "7",
+      "style": "arrow-center"
+    },
+    {
+      "from": "21",
+      "to": "8",
+      "style": "arrow-center"
+    },
+    {
+      "from": "21",
+      "to": "12",
+      "style": "arrow-center"
+    },
+    {
+      "from": "21",
+      "to": "13",
+      "style": "arrow-center"
+    },
+    {
+      "from": "21",
+      "to": "14",
+      "style": "arrow-center"
+    },
+    {
+      "from": "21",
+      "to": "22",
+      "style": "arrow-center"
+    },
+    {
+      "from": "22",
+      "to": "0",
+      "style": "arrow-center"
+    },
+    {
+      "from": "22",
+      "to": "1",
+      "style": "arrow-center"
+    },
+    {
+      "from": "22",
+      "to": "21",
+      "style": "arrow-center"
+    },
+    {
+      "from": "22",
+      "to": "23",
+      "style": "arrow-center"
+    }
+  ]
+}

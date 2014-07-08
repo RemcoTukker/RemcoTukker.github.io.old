@@ -18,6 +18,7 @@ The javascript and css of this website is open source, licensed with (....). The
 
 #### Todo
 
+* See how to fix visjs issues / open issues (in order of importance: resizing, missing nodes, arrows/lines mismatch with ellipse shape nodes)
 * Custom 404
 * Loading and unloading Javascript and CSS on different pages dynamically
 * Using [Markdown Resume Builder](http://there4development.com/markdown-resume/) to present my resume in a prettier way (or [JSON resume](http://jsonresume.org) which I ran into today)
