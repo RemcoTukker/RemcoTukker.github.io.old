@@ -30,4 +30,4 @@ This website wouldn't be possible without:
 * Hosting generously provided by [Github](http://www.github.com)
 * The graph visualization [visjs](http://visjs.org) build by my old colleagues at Almende
 * [NodeJS](http://nodejs.org), [Grunt](http://gruntjs.org) and a workflow inspired by [Roman Nesterov](http://rhrn.github.io/)
-* And of course, the obiqitous [JQuery](http://jquery.com) for the frontend, and the Jquery inspired [Cheerio]() for the mini-crawler at the backend 
+* And of course, the obiqitous [JQuery](http://jquery.com) for the frontend, and the Jquery inspired [Cheerio](http://cheeriojs.github.io/cheerio/) for the mini-crawler at the backend 

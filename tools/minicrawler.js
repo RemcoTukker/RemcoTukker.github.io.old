@@ -18,7 +18,7 @@ exports.processUrls = function(seedUrls, depth, callback) {
     // * Use a DB for storing results instead of doing everything in memory
     // * See if we should deal more carefully with statuscodes (1xx and 5xx range and perhaps specific codes in 2xx, 3xx or 4xx range)
     // * Have an option to bunch all pages in a domain together
-    // * Read robot.txt files
+    // * Read robot.txt files 
     // * Use sitemaps to quickly get an overview of a domain
     // * Have some scheduling for next check of a page? for continuous running instead of instantaneous run
     // * Implement some way to detect loops and constantly changing dynamic sites, ie, to detect swamps
@@ -40,6 +40,9 @@ exports.processUrls = function(seedUrls, depth, callback) {
     var http = require('http');
     var https = require('https');
     var get = function(url, cb) {
+
+	//console.log("get: " + url);
+
         var requestor;
         // apparently, you get a big fat fatal error when using something else than http(s), so we're careful here
         if (url.lastIndexOf('https://', 0) === 0) {
@@ -78,6 +81,9 @@ exports.processUrls = function(seedUrls, depth, callback) {
 
         // TODO: filter out mailto (and other stuff) and # hrefs
         // TODO: detect absolute links properly instead of relying on : not being in latter part of url
+
+	if (typeof link == "undefined") return ""; 
+		// yeah, this does happen for some reason; TODO: find out if there's a reason for it in our code
 
         if ( link.indexOf(':') != -1) return link; // absolute link
         
