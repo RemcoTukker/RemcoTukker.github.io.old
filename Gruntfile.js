@@ -125,6 +125,18 @@ module.exports = function(grunt) {
 
         }        
 
+        //second pass for further cleaning
+        for (var page in result) {
+            // if the entry doesnt have a title, take the last part of the url as a title
+            if (result[page].title === "") {
+                result[page].title = page.slice(page.lastIndexOf("/", page.length - 1) + 1);
+            }
+            if (result[page].description === "") {
+                result[page].description = "[No description given]";
+            }
+
+        }
+
         // then, convert the data in the format that visjs uses: in particular, replace urls with ID numbers
         var id = 0;
         var visjsdata = {nodes:[], edges:[]};

@@ -36,12 +36,13 @@ exports.processUrls = function(seedUrls, depth, callback) {
     // }
     //
 
-    // first, define a get function for getting pages
     var http = require('http');
     var https = require('https');
+
+    // first, define a get function for getting pages
     var get = function(url, cb) {
 
-	//console.log("get: " + url);
+	    console.log("get: " + url);
 
         var requestor;
         // apparently, you get a big fat fatal error when using something else than http(s), so we're careful here
@@ -81,8 +82,10 @@ exports.processUrls = function(seedUrls, depth, callback) {
 
         // TODO: filter out mailto (and other stuff) and # hrefs
         // TODO: detect absolute links properly instead of relying on : not being in latter part of url
+	    
+        //console.log("lc: " + currentUrl + " " + link);
 
-	if (typeof link == "undefined") return ""; 
+   	    if (typeof link == "undefined") return ""; 
 		// yeah, this does happen for some reason; TODO: find out if there's a reason for it in our code
 
         if ( link.indexOf(':') != -1) return link; // absolute link
@@ -130,11 +133,11 @@ exports.processUrls = function(seedUrls, depth, callback) {
                     linksObject[target.url] = {statuscode:statuscode, description: '', title: '', links:{}};
                     var $ = cheerio.load(htmlpage);
                     $('title', 'head').each(function(i, elem) { // extract the title of the page; kinda ugly, but works...
-                        if (typeof elem.children[0] !== 'undefined') linksObject[target.url].title = elem.children[0].data; 
+                        if (typeof elem.children[0] !== 'undefined') linksObject[target.url].title = elem.children[0].data.trim(); 
                     }); 
                     $('meta', 'head').each(function(i, elem) { // extract the description of the page
                         if (typeof elem.attribs.name !== 'undefined' && elem.attribs.name.toLowerCase() == 'description') {
-                            linksObject[target.url].description = elem.attribs.content; 
+                            linksObject[target.url].description = elem.attribs.content.trim(); 
                         }
                     });
                     $('a').each(function(i, elem) { // extract all the links out of the page (TODO: maybe also extract img links)
@@ -150,10 +153,19 @@ exports.processUrls = function(seedUrls, depth, callback) {
                     // preferably using an async function that later updates the linksObject / DB
                     break;
                 case 3: // redirect, eg 301 permanent redirect from /about => /about/
+                    //TODO: dont follow redirects eternally... 5 or something like that max                    
+
+                    var redirectLocation = linkChecker(target.url, headers.location); // handle relative links...
+                    queue.push({url:redirectLocation, depth:target.depth}); // dont increase depth with a redirect; seems more intuitive 
+
+                    // do nothing when redirected to same page (yes, it does happen apparently..)
+                    if (target.url === redirectLocation) break;
+
+                    // now store redirect info
                     var entryLinks = {};
-                    entryLinks[headers.location] = 1; // store page to which we're redirected as a link
-                    linksObject[target.url] = {statuscode:statuscode, title:'3xx Redirect', links:entryLinks};
-                    queue.push({url:headers.location, depth:target.depth}); // dont increase depth with a redirect; seems more intuitive 
+                    entryLinks[redirectLocation] = 1; // store page to which we're redirected as a link
+                    console.log(statuscode + ' redirect to ' + redirectLocation);
+                    linksObject[target.url] = {statuscode:statuscode, title:'3xx Redirect', links:entryLinks, description:target.url + ' redirected to ' + redirectLocation};
                     break;
                 case 4: // client error, eg 404 not found
                     linksObject[target.url] = {statuscode:statuscode, title:'4xx Client Error', links:{}};

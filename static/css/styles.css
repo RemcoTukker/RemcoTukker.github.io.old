@@ -3,6 +3,12 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: black;
   color: #bbbbbb;
+  overflow: hidden;
+}
+/* The overflow: hidden stuff is just to prevent browser from scrolling to top when back 
+   button is clicked.. ugly, but effective*/
+html {
+  overflow: hidden;
 }
 
 #maincontainer,
@@ -33,6 +39,7 @@ body {
   margin-left: 250px;
   height: 100%;
   position: absolute;
+  overflow: auto;
 }
 /*
 #contentcontainer {

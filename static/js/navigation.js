@@ -46,6 +46,7 @@ var fadingState = {
     },
     switchNavigation: function() {
         if (this.navigationOpen) this.closeNavigation(); else this.openNavigation();
+	// TODO: see if we can keep at the same scrolling position (right now it goes to top of page when hiding navigation again)
     },
     followLocalLink: function(href) {
         this.followingLink = true;
@@ -172,6 +173,8 @@ $(window).on("popstate", function(e) {
     breadcrumbs.compareAndMerge(e.originalEvent.state);    
     window.history.replaceState(breadcrumbs.hist, "title: " + location.href);
     fadingState.followLocalLink(location.href);
+    //return false; // this should prevent browser from jumping to top of page (doesnt work)
+	//TODO: see what is actually causing this scroll... only tested in FF so far
 });
 
 // this is fired when navigating back from a different website for example, or restarting browser (popstate isnt fired in those cases)
