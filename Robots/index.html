@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Remco Tukker &mdash; Robots</title>
+    <meta name="description" content="My attempts at building robots">
+    <!-- main styles-->
+    <link href="/static/css/styles.css" rel="stylesheet">
+    <script src="/static/js/jquery-2.1.1.js"></script>
+    <script src="/static/js/vis.js"></script>
+  </head>
+  <body>
+    <div id="graphcontainer">
+    </div>
+    <div id="maincontainer">
+      <div id="sidebarcontainer"><a href="/" class="navigationlink"><img align="left" src="/static/img/I-icon.png" border="0" width="64" height="64"></a>
+      </div>
+      <div id="contentcontainer"><h1 id="robots">Robots</h1>
+<h2 id="stiltbot-hypothetical-">Stiltbot (hypothetical)</h2>
+<h3 id="materials">Materials</h3>
+<ul>
+<li>Two old bicycle spokes and spoke nipples</li>
+<li>Three HXT900-like servos, modified to give access to the potmeter value</li>
+<li>Small version of an Arduino or other uController</li>
+<li>Accelerometer</li>
+<li>Battery (eg 3S LiPo) and a BEC that converts battery power to 5 to 6 V, at least 1A</li>
+<li>Some small pieces of wood or other mounting material</li>
+</ul>
+<h3 id="description">Description</h3>
+<p>While working on the Ostrichbot I noticed that the mounting holes of a HXT900-like microservo are exactly the right size for an old bicycle spoke (yeah, I&#39;m Dutch). This solved one of my construction problems, namely how to create a slightly flexible, but still sturdy leg for a robot, and gave me the idea for a simplified Ostrichbot. Here are photos of Stiltbots compliant leg:</p>
+<p><img src="/static/img/leg.jpg" alt="Stiltbot leg" title="Stiltbot leg"></p>
+<p><img src="/static/img/knee.jpg" alt="Mounting of spoke to servo" title="Mounting of spoke to servo"></p>
+<p>I bent the spoke so that it fits through the two mounting holes exactly, and the screw thread in the right position to fasten it at one of the mounting holes with the matching spoke nipple. If you want to do this yourself, use steel spokes and make sure you have the right spoke diameter (there&#39;s three standard diameters, don&#39;t know which one I used at the moment). This gives a quite nice compliant foot for robots of 100 to 500 grams (guesstimate). Of course, you can also bent the lower end of the spoke into a shape that gives you a larger support surface.</p>
+<p>So, how to make a Stiltbot now? Use a bit of the mounting material to connect the servo horns on the leg servos, and also connect the last servo that will be used for right-left balance. All the rest of the material, battery, accelero, BEC and uController will go on another piece of mounting material that is connected to the balance servo horn (see drawing). Ideally, this shouldn&#39;t be too heavy, I was thinking around 100g only.</p>
+<p><img src="/static/img/stiltbot_frame.jpg" alt="Drawing of Stiltbot construction" title="Drawing of Stiltbot construction"></p>
+<p>Wire everything up, write some software, and that&#39;s all! Well... Of course, the reason that this is a hypothetical bot and not a real bot is that the &quot;write some software&quot; part is rather hard. As you may have noticed, we dont have the &quot;ankle&quot; actuator that is found on most robots, which means we can only balance the robot by moving the &quot;hip&quot; actuator and changing the angle between the body and the leg. This is a situation that is studied extensively with the so-called <a href="http://www.cc.gatech.edu/projects/acrobot/">Acrobot</a>. So, okay, at least it is theoretically possible to balance the robot. </p>
+<p>In practice however, we have to admit that the stiltbot is actually three connected Acrobots instead of just one: one for each leg and one for left-right balance. That means that to build the control software that can balance the robot we either need to do <em>a lot</em> of parameter tuning, or we have to build a computer model of the robot, taking into account all flexible parts, noise issues, etc (and probably both). I think this would require at least a couple of months if you want to implement balancing, walking, turning, and maybe even running, so until I can find that time, this robot remains hypothetical.</p>
+<h3 id="relevant-links">Relevant links</h3>
+<ul>
+<li>Paper about Acrobot control: <a href="http://www2.ece.ohio-state.edu/~passino/PapersToPost/acrobot-JIRSTA.pdf">SC Brown &amp; KM Passino: Intelligent Control for an Acrobot</a></li>
+<li>Simple hack for a hobby servo to give position feedback: <a href="http://forums.trossenrobotics.com/tutorials/how-to-diy-128/get-position-feedback-from-a-standard-hobby-servo-3279/">Trossen Robotics Community</a></li>
+</ul>
+<h2 id="ostrichbot">Ostrichbot</h2>
+<h3 id="materials">Materials</h3>
+<ul>
+<li>Two old bicycle spokes and spoke nipples</li>
+<li>6 to 8 HXT900-like servos, some of them modified to give access to the potmeter value</li>
+<li>Small version of an Arduino or other uController</li>
+<li>Accelerometer</li>
+<li>Battery (eg 3S LiPo) and a BEC that converts battery power to 5 to 6 V, at least 2A</li>
+<li>Some small pieces of wood or other mounting material</li>
+</ul>
+<h3 id="description">Description</h3>
+<p>I&#39;m currently working on this robot. It&#39;s a robot inspired by running birds, and I would like it to be a very light, small and cheap robot that nevertheless has full bipedal mobility: I want it to stand, walk, run, turn and get up in case it falls. All that with 6 to 8 servos. The feet (lower part of the leg of a bird is what is our foot) will be very similar to the stiltbot leg, but the Ostrichbot leg will have an upper part as well. Then in the knee/hip joint there will be some more servos for pointing the leg in the right direction.</p>
+<h3 id="relevant-links">Relevant links</h3>
+<ul>
+<li>Great video material of running ostrich: <a href="http://mfll-uwa.jonasrubenson.com/Comparative.html">University of Western Australia Muscle Function and Locomotion Lab</a></li>
+</ul>
+<h2 id="dotty">Dotty</h2>
+<p>Worked on this robot when I was employed at DoBots, search <a href="http://www.dobots.nl">their website</a> for more info.</p>
+
+      </div>
+    </div>
+    <!-- main javascript-->
+    <script src="/static/js/navigation.js"></script>
+    <!--script.-->
+    <!-- google analytics code, etc...-->
+  </body>
+</html>

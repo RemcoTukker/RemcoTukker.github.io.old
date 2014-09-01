@@ -3,6 +3,13 @@ exports.processUrls = function(seedUrls, depth, callback) {
     // This function crawls websites searching for links and storing some metadata in memory (title, description, http status code)
     // No url is visited twice and the results are supplied in one big object (see below what it looks like) to the callback function
 
+    // bugs to fix:
+    // * assume www.blabla.nl is the same as blabla.nl  and www.blabla.nl is the same as www.blabla.nl/
+    //    or maybe do that in the gruntfile.. probably better to do there as there may actually be a real difference
+    // * see where this is coming from: Error: protocol of /markdown-resume/ not supported, fix the link checking function!!
+    //    also seems to increase size of the visjs circle of the link after that, JSON resume
+    // * no title, url or description is given when we run into a pdf file
+
     // TODO: (to make this a completely functional crawler)
     // * Improve linkchecker function
     // * Add optional postprocessing to remove 301 redirects (by replacing the original url with the url that the redirect points to)

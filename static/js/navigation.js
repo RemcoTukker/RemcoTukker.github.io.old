@@ -77,7 +77,7 @@ $.get(graphUrl, function(data, status, jqxhr){
 
    
     //draw the graph :-)
-    graph = new vis.Graph($("#graphcontainer").get(0), data);
+    graph = new vis.Network($("#graphcontainer").get(0), data);
 
     //add links to pages!
     graph.on('select', function(props) {
