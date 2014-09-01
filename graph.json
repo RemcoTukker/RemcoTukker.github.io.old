@@ -15,30 +15,30 @@
     },
     {
       "id": 2,
-      "label": "Home — @rhrn",
-      "title": "",
-      "url": "http://rhrn.github.io/",
-      "statuscode": 200
-    },
-    {
-      "id": 3,
       "label": "jQuery",
       "title": "jQuery: The Write Less, Do More, JavaScript Library",
       "url": "http://jquery.com",
       "statuscode": 200
     },
     {
-      "id": 4,
-      "label": "Muscle Function & Loco...",
+      "id": 3,
+      "label": "Home — @rhrn",
       "title": "",
-      "url": "http://mfll-uwa.jonasrubenson.com/Comparative.html",
+      "url": "http://rhrn.github.io/",
+      "statuscode": 200
+    },
+    {
+      "id": 4,
+      "label": "node.js",
+      "title": "",
+      "url": "http://nodejs.org",
       "statuscode": 200
     },
     {
       "id": 5,
-      "label": "node.js",
+      "label": "Muscle Function & Loco...",
       "title": "",
-      "url": "http://nodejs.org",
+      "url": "http://mfll-uwa.jonasrubenson.com/Comparative.html",
       "statuscode": 200
     },
     {
@@ -63,10 +63,9 @@
     },
     {
       "id": 9,
-      "label": "\n\t\tJSON Resume \n\t",
-      "title": "",
-      "url": "http://jsonresume.org",
-      "statuscode": 200
+      "label": "3xx Redirect",
+      "url": "https://www.github.com/",
+      "statuscode": 301
     },
     {
       "id": 10,
@@ -76,9 +75,10 @@
     },
     {
       "id": 11,
-      "label": "3xx Redirect",
-      "url": "https://www.github.com/",
-      "statuscode": 301
+      "label": "\n\t\tJSON Resume \n\t",
+      "title": "",
+      "url": "http://jsonresume.org",
+      "statuscode": 200
     },
     {
       "id": 12,
@@ -200,17 +200,17 @@
     },
     {
       "from": "6",
-      "to": "11",
+      "to": "9",
+      "style": "arrow-center"
+    },
+    {
+      "from": "9",
+      "to": "14",
       "style": "arrow-center"
     },
     {
       "from": "10",
       "to": "17",
-      "style": "arrow-center"
-    },
-    {
-      "from": "11",
-      "to": "14",
       "style": "arrow-center"
     },
     {
@@ -220,7 +220,7 @@
     },
     {
       "from": "23",
-      "to": "4",
+      "to": "5",
       "style": "arrow-center"
     },
     {
@@ -250,7 +250,7 @@
     },
     {
       "from": "26",
-      "to": "5",
+      "to": "4",
       "style": "arrow-center"
     },
     {
@@ -265,12 +265,12 @@
     },
     {
       "from": "26",
-      "to": "9",
+      "to": "10",
       "style": "arrow-center"
     },
     {
       "from": "26",
-      "to": "10",
+      "to": "11",
       "style": "arrow-center"
     },
     {

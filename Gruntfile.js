@@ -42,9 +42,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jade');
 
-  grunt.registerTask('default', ['jade', 'web', 'dotfile', 'watch']);
-  grunt.registerTask('dot', ['web', 'dotfile']);
-  grunt.registerTask('publish', ['jade', 'dot']);
+  grunt.registerTask('default', ['jade', 'web', 'graphfile', 'watch']);
+  grunt.registerTask('crawl', ['web', 'graphfile']);
+  grunt.registerTask('publish', ['jade', 'crawl']);
   grunt.registerTask('server', ['web', 'watch']);
 
   grunt.registerTask('web', 'Start web server...', function() {
@@ -63,7 +63,7 @@ module.exports = function(grunt) {
     //grunt.task.run(["watch:jade"]);
   });
 
-  grunt.registerTask('dotfile', 'Build dotfile based on website' , function() {
+  grunt.registerTask('graphfile', 'Build file with links between pages on website' , function() {
 
     //make this function async:  
     var done = this.async(); //and call done() when done of course
