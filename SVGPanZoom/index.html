@@ -1161,10 +1161,10 @@ console.log(svgpanzoom.transform.baseVal);
           newx += ongoingTouches[key].x; // we'll divide by touches.length in the end
           newy += ongoingTouches[key].y;
         }
+        newx /= touches.length; newy /= touches.length; // clearly, touches shouldnt be empty, lets see if we can break this
         for (var key in ongoingTouches) {
           newr += (ongoingTouches[key].x - newx) * (ongoingTouches[key].x - newx) + (ongoingTouches[key].y - newy) * (ongoingTouches[key].y - newy);
         }
-        newx /= touches.length; newy /= touches.length; // clearly, touches shouldnt be empty, lets see if we can break this
          console.log("new: " + newx + "  " + newy + "  " + newr + " length " + Object.keys(ongoingTouches).length);
         // pan and zoom
         var pt1 = screenToPanZoomCoords(oldx, oldy); 
@@ -1172,9 +1172,9 @@ console.log(svgpanzoom.transform.baseVal);
         pan(pt2.x - pt1.x, pt2.y - pt1.y);
 
         var pt = screenToPanZoomCoords(newx, newy); // get newest coords
-        var z = Math.pow(oldr / newr, zoomSensitivity/2);         // TODO: this should be done a bit better, preferably similar to mouse
+        var z = Math.pow(newr / oldr, zoomSensitivity/2);         // TODO: this should be done a bit better, preferably similar to mouse
         console.log(z);
-        //zoom(pt.x, pt.y, z);                                      // and then zoom in
+        zoom(pt.x, pt.y, z);                                      // and then zoom in
 
       }
 
