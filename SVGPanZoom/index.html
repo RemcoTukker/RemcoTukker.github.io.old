@@ -1165,12 +1165,12 @@ console.log(svgpanzoom.transform.baseVal);
         }
          console.log("new: " + newx + "  " + newy + "  " + newr);
         // pan and zoom
-        var pt1 = screenToPanZoomCoords(oldx, oldy); 
-        var pt2 = screenToPanZoomCoords(newx, newy);
+        var pt1 = screenToPanZoomCoords(oldx/touches.length, oldy/touches.length); 
+        var pt2 = screenToPanZoomCoords(newx/touches.length, newy/touches.length);
         pan(pt2.x - pt1.x, pt2.y - pt1.y);
 
-        var pt = screenToPanZoomCoords(newx, newy); // get newest coords
-        var z = 1 + (0.1 * oldr / newr) * zoomSensitivity;         // calculate how much we want to scale
+        var pt = screenToPanZoomCoords(newx/touches.length, newy/touches.length); // get newest coords
+        var z = Math.pow(oldr / newr, zoomSensitivity);         // TODO: this should be done a bit better, preferably similar to mouse
         console.log(z);
         zoom(pt.x, pt.y, z);                                      // and then zoom in
 
