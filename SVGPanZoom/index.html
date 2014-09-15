@@ -1148,7 +1148,7 @@ console.log(svgpanzoom.transform.baseVal);
         for (var key in ongoingTouches) {
           oldr += (ongoingTouches[key].x - oldx) * (ongoingTouches[key].x - oldx) + (ongoingTouches[key].y - oldy) * (ongoingTouches[key].y - oldy);
         }
-        console.log("old: " + oldx + "  " + oldy + "  " + oldr);
+        console.log("old: " + oldx + "  " + oldy + "  " + oldr + " length " + touches.length);
         // update touch info
         for (var i=0; i < evt.changedTouches.length; i++) {
           ongoingTouches[evt.changedTouches[i].identifier].x = evt.changedTouches[i].clientX;
@@ -1165,16 +1165,16 @@ console.log(svgpanzoom.transform.baseVal);
           newr += (ongoingTouches[key].x - newx) * (ongoingTouches[key].x - newx) + (ongoingTouches[key].y - newy) * (ongoingTouches[key].y - newy);
         }
         newx /= touches.length; newy /= touches.length; // clearly, touches shouldnt be empty, lets see if we can break this
-         console.log("new: " + newx + "  " + newy + "  " + newr);
+         console.log("new: " + newx + "  " + newy + "  " + newr + " length " + Object.keys(ongoingTouches).length);
         // pan and zoom
         var pt1 = screenToPanZoomCoords(oldx, oldy); 
         var pt2 = screenToPanZoomCoords(newx, newy);
         pan(pt2.x - pt1.x, pt2.y - pt1.y);
 
-        var pt = screenToPanZoomCoords(newx/touches.length, newy/touches.length); // get newest coords
-        var z = Math.pow(oldr / newr, zoomSensitivity);         // TODO: this should be done a bit better, preferably similar to mouse
+        var pt = screenToPanZoomCoords(newx, newy); // get newest coords
+        var z = Math.pow(oldr / newr, zoomSensitivity/2);         // TODO: this should be done a bit better, preferably similar to mouse
         console.log(z);
-        zoom(pt.x, pt.y, z);                                      // and then zoom in
+        //zoom(pt.x, pt.y, z);                                      // and then zoom in
 
       }
 
