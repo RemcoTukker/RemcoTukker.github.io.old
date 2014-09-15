@@ -1147,6 +1147,7 @@ console.log(svgpanzoom.transform.baseVal);
         for (var key in ongoingTouches) {
           oldr += (ongoingTouches[key].x - oldx) * (ongoingTouches[key].x - oldx) + (ongoingTouches[key].y - oldy) * (ongoingTouches[key].y - oldy);
         }
+        console.log("old: " + oldx + "  " + oldy + "  " + oldr);
         // update touch info
         for (var i=0; i < evt.changedTouches.length; i++) {
           ongoingTouches[evt.changedTouches[i].identifier].x = evt.changedTouches[i].clientX;
@@ -1162,7 +1163,7 @@ console.log(svgpanzoom.transform.baseVal);
         for (var key in ongoingTouches) {
           newr += (ongoingTouches[key].x - newx) * (ongoingTouches[key].x - newx) + (ongoingTouches[key].y - newy) * (ongoingTouches[key].y - newy);
         }
- 
+         console.log("new: " + newx + "  " + newy + "  " + newr);
         // pan and zoom
         var pt1 = screenToPanZoomCoords(oldx, oldy); 
         var pt2 = screenToPanZoomCoords(newx, newy);
@@ -1170,6 +1171,7 @@ console.log(svgpanzoom.transform.baseVal);
 
         var pt = screenToPanZoomCoords(newx, newy); // get newest coords
         var z = 1 + (0.1 * oldr / newr) * zoomSensitivity;         // calculate how much we want to scale
+        console.log(z);
         zoom(pt.x, pt.y, z);                                      // and then zoom in
 
       }
