@@ -1139,17 +1139,42 @@ console.log(svgpanzoom.transform.baseVal);
         ongoingTouches[touches[0]].y = evt.changedTouches[0].clientY;
       } else { // pinch-zoom
         // find out last center and radius
+        var oldx = 0, oldy = 0, oldr = 0;
+        for (var key in ongoingTouches) {
+          oldx += ongoingTouches[key].x; // we'll divide by touches.length in the end
+          oldy += ongoingTouches[key].y;
+        }
+        for (var key in ongoingTouches) {
+          oldr += (ongoingTouches[key].x - oldx) * (ongoingTouches[key].x - oldx) + (ongoingTouches[key].y - oldy) * (ongoingTouches[key].y - oldy);
+        }
+        // update touch info
+        for (var i=0; i < evt.changedTouches.length; i++) {
+          ongoingTouches[evt.changedTouches[i].identifier].x = evt.changedTouches[i].clientX;
+          ongoingTouches[evt.changedTouches[i].identifier].y = evt.changedTouches[i].clientY;
+        } 
+
         // find out new center and radius
-
-        // loop over changed touches to find deviation from center and also update ongoingTouches object with new info
-
+        var newx = 0, newy = 0, newr = 0;
+        for (var key in ongoingTouches) {
+          newx += ongoingTouches[key].x; // we'll divide by touches.length in the end
+          newy += ongoingTouches[key].y;
+        }
+        for (var key in ongoingTouches) {
+          newr += (ongoingTouches[key].x - newx) * (ongoingTouches[key].x - newx) + (ongoingTouches[key].y - newy) * (ongoingTouches[key].y - newy);
+        }
  
-        // zoom
+        // pan and zoom
+        var pt1 = screenToPanZoomCoords(oldx, oldy); 
+        var pt2 = screenToPanZoomCoords(newx, newy);
+        pan(pt2.x - pt1.x, pt2.y - pt1.y);
+
+        var pt = screenToPanZoomCoords(newx, newy); // get newest coords
+        var z = 1 + (0.1 * oldr / newr) * zoomSensitivity;         // calculate how much we want to scale
+        zoom(pt.x, pt.y, z);                                      // and then zoom in
+
       }
 
-      //var touches = evt.changedTouches;
-      //for (var i=0; i < touches.length; i++) {
-      //} 
+      
     }
 
 
