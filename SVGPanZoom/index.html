@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Remco Tukker &mdash; Robots</title>
-    <meta name="description" content="My attempts at building robots">
+    <title>Remco Tukker &mdash; SVG Pan Zoom</title>
+    <meta name="description" content="JS SVG Pan Zoom demo">
     <!-- main styles-->
     <link href="/static/css/styles.css" rel="stylesheet">
     <script src="/static/js/jquery-2.1.1.js"></script>
@@ -11,7 +11,7 @@
   </head>
   <body>
     <div id="graphcontainer">
-      <!--block navigation--><svg version="1.1" baseProfile="full" width="400" height="600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid" id="svggraph" >
+      <!--block navigation--><svg version="1.1" baseProfile="full" width="400" height="600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid" id="svggraph" style="overflow: hidden;">
        
   <defs>
       <!-- gradient for the text ellipses -->
@@ -302,11 +302,8 @@
     <div id="maincontainer">
       <div id="sidebarcontainer"><a href="/" id="navigationlink"></a>
       </div>
-      <div id="contentcontainer"><svg id="svgtiger" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" version="1.1" width="50%" height="50%" preserveAspectRatio="xMidYMid" style="margin-left: 25%; margin-right: 25%; margin-top: 3%; border: 1px solid #bbbbbb">
+      <div id="contentcontainer"><svg id="svgtiger" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 900 900" version="1.1" width="50%" height="50%" preserveAspectRatio="xMidYMid" style="margin-left: 25%; margin-right: 25%; margin-top: 3%; border: 1px solid #bbbbbb; overflow: hidden;">
  <g id="tigerpanzoom" fill="none" transform="matrix(1,0,0,1,324.90716,255.00942)">
-
-  <script type="text/ecmascript" xlink:href="SVGPanZoom.js" />
-  
   <g id="g6" stroke-width="0.17200001" stroke="#000" fill="#FFF">
    <path id="path8" d="m-122.3,84.285s0.1,1.894-0.73,1.875c-0.82-0.019-17.27-48.094-37.8-45.851,0,0,17.78-7.353,38.53,43.976z"/>
   </g>
@@ -1030,23 +1027,13 @@
  </g>
 </svg>
 <h1 id="svg-pan-zoom-code">SVG Pan Zoom Code</h1>
-<p>SVG Pan Zoom code including support for autoscaled SVGs and touch events. Supported browsers: IE9+ FF Chrome Android 4+. Can be embedded in SVG image or anywhere else in the page. Only required effort is that you match the ID tag of the svg element and the panzoom element with the IDs that the code is looking for. The panzoom element should be a <code>&lt;g transform=&quot;matrix(a,b,c,d,e,f)&quot;&gt;</code> with numbers substituted for the letters of course.</p>
-<p>Separate Github repo will be made as soon as I take the time to find out how I could link to that code in this page.</p>
-<h1 id="code">Code</h1>
+<p>This is a demo of my JS PanZoom code for autoscaled SVGs. See <a href="https://github.com/RemcoTukker/SVGPanZoom">the github repo</a> for the code and an explanation of how to use it yourself. I used it for the panning and zooming of the navigation menu of this site.</p>
+<p>Reminder to self: write up a walkthrough of this code next time I look at it.</p>
 
-        <pre><code>    // SVG Pan/Zoom that can be used with autoscaled SVGs by Remco Tukker (2014)
+        <script>    // SVG Pan/Zoom that can be used with autoscaled SVGs by Remco Tukker (2014)
     // Distributed under a Apache V2 license
     //
-    // It is intended to work on modern browsers (Firefox, Chrome, IE9+, Android Browser 4+)
     //
-    //   If going to IE10+ and Android 4.4+, we could maybe improve responsiveness by using requestAnimationFrame 
-    //       TODO: use requestAnimationFrame if it is available
-    //
-    //       TODO: test on multiple browsers, then try to improve with getting/setting code below and test on multiple browsers again
-    //
-    // inspired by SVGPan ( https://code.google.com/p/svgpan/ ) by Andrea Leofreddi
-    // (also see http://www.cyberz.org/blog/2009/12/08/svgpan-a-javascript-svg-panzoomdrag-library/)
-    // and http://www.petercollingridge.co.uk/interactive-svg-components/pan-and-zoom-control
     // alt matrix transform getting/setting (does it work in other browsers?) elem.transform.baseVal.getItem(0).setMatrix(matrix);
         // Getting
     //    var xforms = myElement.transform.baseVal; // An SVGTransformList
@@ -1062,16 +1049,20 @@
     // define as follows:
     // &lt;svg blablabla id="svggraph" &gt;
     // &lt;g id="svgpanzoom" transform="matrix(a,b,c,d,e,f)" &gt;  with a and d scale and e and f translation 
+    console.log("panzoom loaded")
+
     var svggraph = document.getElementById("svgtiger");
     var svgpanzoom = svggraph.getElementById("tigerpanzoom");    
 
     // config
-    var zoomSensitivity = 1;   // speed of zooming
+    var zoomSensitivity = 5;   // speed of zooming
     var ignoreMouseOut = true; // ignore mouse out or handle it as a mouseup event
-      // TODO see why mouseout events are being generated when not really going out and how to fix that
+      // mouseout events are being generated when leaving -every- svg element; so, add test for evt.target == svg
     
     // the currently used transformation (note that getCTM gives us a wrong result due to autoscaling of image)
     var tfstring = svgpanzoom.getAttribute("transform");
+    console.log(svgpanzoom.transform.baseVal);
+
     var tfmatrixelements = [];
     tfstring = tfstring.slice( tfstring.indexOf("(") + 1 );
     tfmatrixelements[0] = parseFloat(tfstring);
@@ -1113,8 +1104,54 @@
       mousePressed = true;
       lastX = evt.clientX;
       lastY = evt.clientY;
+console.log(svgpanzoom.transform.baseVal);
       //return false; // prevents browser from dragging elements in some situations
     }
+
+    var ongoingTouches = {};
+    function touchDown(evt) {
+      // add the new touch(es) to our list
+      evt.preventDefault();
+
+      var touches = evt.changedTouches;
+      for (var i=0; i < touches.length; i++) {
+        ongoingTouches[touches[i].identifier] = {x: touches[i].clientX, y: touches[i].clientY} );
+      } 
+    }
+
+    function touchUp(evt) {
+      // remove touches from our list
+      evt.preventDefault();
+      var touches = evt.changedTouches;
+      for (var i=0; i < touches.length; i++) {
+        delete ongoingTouches[touches[i].identifier];
+      } 
+    }
+
+    function touchMove(evt) {
+      evt.preventDefault();
+      var touches = Object.keys(ongoingTouches);
+      if (touches.length == 1) { // pan
+        var pt1 = screenToPanZoomCoords(ongoingTouches[touches[0]].x, ongoingTouches[touches[0]].y); // to make sure we always use the newest transform
+        var pt2 = screenToPanZoomCoords(evt.changedTouches[0].clientX, evt.changedTouches[0].clientY);
+        pan(pt2.x - pt1.x, pt2.y - pt1.y);
+        ongoingTouches[touches[0]].x = evt.changedTouches[0].clientX;
+        ongoingTouches[touches[0]].y = evt.changedTouches[0].clientY;
+      } else { // pinch-zoom
+        // find out last center and radius
+        // find out new center and radius
+
+        // loop over changed touches to find deviation from center and also update ongoingTouches object with new info
+
+ 
+        // zoom
+      }
+
+      //var touches = evt.changedTouches;
+      //for (var i=0; i < touches.length; i++) {
+      //} 
+    }
+
 
     function mouseUp(evt) {
       mousePressed = false;
@@ -1134,9 +1171,9 @@
     }
 
     function wheel(evt) {
-      // TODO: test for large differences in deltaY between browsers..
       var pt = screenToPanZoomCoords(evt.clientX, evt.clientY); // find out location in panzoom coordinates
-      var z = (1 + 0.01 * evt.deltaY / Math.abs(evt.deltaY)) * zoomSensitivity;         // calculate how much we want to scale
+      var z = 1 + (0.01 * evt.deltaY / Math.abs(evt.deltaY)) * zoomSensitivity;         // calculate how much we want to scale
+                                      // the Math.abs is to deal with some nasty browser differences in deltaY differences
       
       zoom(pt.x, pt.y, z);                                      // and then zoom in
       
@@ -1146,9 +1183,14 @@
 
     // last but not least, the necessary event listeners
     svggraph.addEventListener('mousedown', function(evt){ return mouseDown(evt); });
+    svggraph.addEventListener('touchstart', function(evt){ return touchDown(evt); });
     svggraph.addEventListener('mouseup', function(evt){ return mouseUp(evt); });
+    svggraph.addEventListener('touchend', function(evt){ return touchUp(evt); });
+    //svggraph.addEventListener('touchleave', function(evt){ return touchUp(evt); });
+    svggraph.addEventListener('touchcancel', function(evt){ return touchUp(evt); });
     svggraph.addEventListener('mouseout', function(evt){ return ignoreMouseOut || mouseUp(evt); });
     svggraph.addEventListener('mousemove', function(evt){ return mouseMove(evt); });
+    svggraph.addEventListener('touchmove', function(evt){ return touchMove(evt); });
 
     // the "wheel" event is rather new, but if it doesnt work due to old browser, too bad, not important..
     // TODO: does this work in mobile browser when pinching though? I do want _that_
@@ -1156,7 +1198,9 @@
 
     svgpanzoom.addEventListener('dragstart', function(evt) {evt.preventDefault(); }); // no dragging away svg elements please
     
-</code></pre>
+
+        </script>
+        <!-- Dependency! The includes go to my local SVGPanZoom repo.-->
       </div>
     </div>
     <!-- main javascript-->
