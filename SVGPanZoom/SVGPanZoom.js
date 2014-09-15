@@ -98,9 +98,9 @@
     }
 
     function wheel(evt) {
-      // TODO: test for large differences in deltaY between browsers..
       var pt = screenToPanZoomCoords(evt.clientX, evt.clientY); // find out location in panzoom coordinates
-      var z = (1 + evt.deltaY / 100) * zoomSensitivity;         // calculate how much we want to scale
+      var z = (1 + 0.01 * evt.deltaY / Math.abs(evt.deltaY)) * zoomSensitivity;         // calculate how much we want to scale
+                                      // the Math.abs is to deal with some nasty browser differences in deltaY differences
       
       zoom(pt.x, pt.y, z);                                      // and then zoom in
       

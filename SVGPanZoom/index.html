@@ -1042,6 +1042,8 @@
     //   If going to IE10+ and Android 4.4+, we could maybe improve responsiveness by using requestAnimationFrame 
     //       TODO: use requestAnimationFrame if it is available
     //
+    //       TODO: test on multiple browsers, then try to improve with getting/setting code below and test on multiple browsers again
+    //
     // inspired by SVGPan ( https://code.google.com/p/svgpan/ ) by Andrea Leofreddi
     // (also see http://www.cyberz.org/blog/2009/12/08/svgpan-a-javascript-svg-panzoomdrag-library/)
     // and http://www.petercollingridge.co.uk/interactive-svg-components/pan-and-zoom-control
@@ -1066,6 +1068,7 @@
     // config
     var zoomSensitivity = 1;   // speed of zooming
     var ignoreMouseOut = true; // ignore mouse out or handle it as a mouseup event
+      // TODO see why mouseout events are being generated when not really going out and how to fix that
     
     // the currently used transformation (note that getCTM gives us a wrong result due to autoscaling of image)
     var tfstring = svgpanzoom.getAttribute("transform");
@@ -1133,7 +1136,7 @@
     function wheel(evt) {
       // TODO: test for large differences in deltaY between browsers..
       var pt = screenToPanZoomCoords(evt.clientX, evt.clientY); // find out location in panzoom coordinates
-      var z = (1 + evt.deltaY / 100) * zoomSensitivity;         // calculate how much we want to scale
+      var z = (1 + 0.01 * evt.deltaY / Math.abs(evt.deltaY)) * zoomSensitivity;         // calculate how much we want to scale
       
       zoom(pt.x, pt.y, z);                                      // and then zoom in
       
