@@ -1060,7 +1060,7 @@
       // mouseout events are being generated when leaving -every- svg element; so, add test for evt.target == svg
     
     // the currently used transformation (note that getCTM gives us a wrong result due to autoscaling of image)
-    var tfstring = svgpanzoom.getAttribute("transform");
+ /*   var tfstring = svgpanzoom.getAttribute("transform");
     console.log(svgpanzoom.transform.baseVal);
 
     var tfmatrixelements = [];
@@ -1073,7 +1073,16 @@
     console.log(tfmatrixelements);
     var tf = svggraph.createSVGMatrix(); 
     tf.a = tfmatrixelements[0]; tf.b = tfmatrixelements[1]; tf.c = tfmatrixelements[2]; 
-    tf.d = tfmatrixelements[3]; tf.e = tfmatrixelements[4]; tf.f = tfmatrixelements[5]; 
+    tf.d = tfmatrixelements[3]; tf.e = tfmatrixelements[4]; tf.f = tfmatrixelements[5]; */
+    //
+
+    var transformList = svgpanzoom.transform.baseVal;
+    console.log(transformList);
+    var tf = svggraph.createSVGMatrix(); 
+    var panZoomTransform = transformList.createSVGTransformFromMatrix(tf);
+    transformList.appendItem(panZoomTransform);
+    panZoomTransform.setMatrix(tf);
+
 
     // mouse state
     var mousePressed = false, lastX, lastY;
@@ -1089,14 +1098,16 @@
     // pan the image a certain x and y distance (in panzoom coordinates!)
     function pan(x, y) {
       tf = tf.translate(x, y);
-      svgpanzoom.setAttribute("transform", "matrix(" + tf.a + " " + tf.b + " " + tf.c + " " + tf.d + " " + tf.e + " " + tf.f + ")");
+      panZoomTransform.setMatrix(tf);
+      //svgpanzoom.setAttribute("transform", "matrix(" + tf.a + " " + tf.b + " " + tf.c + " " + tf.d + " " + tf.e + " " + tf.f + ")");
     }
 
     // zoom the image at a certain x y location (in panzoom coordinates!)
     function zoom(x, y, factor) {  
       // first translate x and y to origin, then zoom, then translate origin back to x y
       tf = tf.translate(x, y).scale(factor).translate(-x, -y);
-      svgpanzoom.setAttribute("transform", "matrix(" + tf.a + " " + tf.b + " " + tf.c + " " + tf.d + " " + tf.e + " " + tf.f + ")");
+      panZoomTransform.setMatrix(tf);      
+      //svgpanzoom.setAttribute("transform", "matrix(" + tf.a + " " + tf.b + " " + tf.c + " " + tf.d + " " + tf.e + " " + tf.f + ")");
     }
 
     // functions for processing mouse movements
@@ -1104,7 +1115,6 @@
       mousePressed = true;
       lastX = evt.clientX;
       lastY = evt.clientY;
-console.log(svgpanzoom.transform.baseVal);
       //return false; // prevents browser from dragging elements in some situations
     }
 
@@ -1205,7 +1215,6 @@ console.log(svgpanzoom.transform.baseVal);
                                       // the Math.abs is to deal with some nasty browser differences in deltaY differences
       
       zoom(pt.x, pt.y, z);                                      // and then zoom in
-      
       evt.preventDefault();
       return false; 
     }
@@ -1222,7 +1231,6 @@ console.log(svgpanzoom.transform.baseVal);
     svggraph.addEventListener('touchmove', function(evt){ return touchMove(evt); });
 
     // the "wheel" event is rather new, but if it doesnt work due to old browser, too bad, not important..
-    // TODO: does this work in mobile browser when pinching though? I do want _that_
     svggraph.addEventListener('wheel', function(evt){ return wheel(evt) });
 
     svgpanzoom.addEventListener('dragstart', function(evt) {evt.preventDefault(); }); // no dragging away svg elements please
