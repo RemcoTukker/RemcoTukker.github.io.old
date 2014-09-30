@@ -17,9 +17,8 @@ The javascript and css of this website is open source, licensed with an [Apache 
 #### Todo
 
 * Properly organize JS code in modules, as far as I didnt do that yet
-* Remove standard y-scrolling and replace it with something pretty (if JS available)
-* Custom 404
 * Properly load and unload Javascript and CSS on different pages dynamically
+* Custom 404
 * Using [Markdown Resume Builder](http://there4development.com/markdown-resume/) to present my resume in a prettier way (or [JSON resume](http://jsonresume.org) which I ran into today)
 * Improving code: documentation, functionality of mini-crawler (make it a proper crawler!)
 * Just search for TODO in the codebase and you'll find the rest!

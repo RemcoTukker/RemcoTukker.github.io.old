@@ -2,19 +2,16 @@
  * Pretty short and sweet code for graph layout. R Tukker (2014)
  * TODO:
  *   Some small improvements found in the TODO s throughout the code
+ *   Separate x and y force constants
+ *   Maybe add some noise to break symmetry in cases of instable equilibrium
+ *   Maybe handle particles on exactly the same position better  
  */ 
 
 // variable to store our particles in; will look like this: 
-// OLD
-//[{data:{id:"node1", mass:1, x:30, y:40, edges:[arraynr, ... ]}, calc:{fx:0, fy:0, xold, yold} } , {data:{id:"node2", ...}, calc:{...} }]
-// fx and fy property for the force on the particle, xold and yold for the Verlet integration
-// NEW
-
 // {"id":{x:30, y:40, mass:1, fx:0, fy:0, xold:30, yold:40, edges:["id1", "id2"] }, "id2":{...}}
 // fx and fy property for the force on the particle, are reset everytime update starts
 // xold and yold last position for the Verlet integration, can be used to give starting speed
 // edges is an array with ids of the particles it connects to with a spring
-
 var particles = {}; 
 
 // variable to keep the timeout ID of the next timestep; global so that we can stop the updating loop
@@ -25,11 +22,11 @@ var autopaused = false;
 
 // variable for the options / settings of the simulation (all lowercase keys so that we can do toLowerCase() preventing user frustration)
 var opt = {
-  gravity: -6000,                 // attraction / repulsion between the particles, approximated by Barnes-Hut
+  gravity: -8000,                 // attraction / repulsion between the particles, approximated by Barnes-Hut
   oneovertheta: 2,               // for Barnes-Hut approximation
   maxquaddepth: 64,              // how deep the quadtree is allowed to get before merging particles into same quad; 64 gives a pretty good range
   centeringforce: 0.00001,       // for the center pointing 'gravity'
-  friction: 0.4,                 // should be >= 0   ; 0.9 seems ok
+  friction: 1.2,                 // should be >= 0   ; 0.9 seems ok
   springlength: 30,              // equilibrium length of springs
   springconstant: 1,
   reciprocalspring: false,       // whether a spring should exert a force on both nodes or only on the initiating side of an edge
@@ -39,11 +36,10 @@ var opt = {
 
 // function to process incoming message
 onmessage = function (evt) {
-
   // first check if we have a start / stop message (or another string), and if so, do whats requested and return
   if (typeof evt.data == 'string') {
-    if (evt.data.toLowerCase() == "stop" || evt.data.toLowerCase() == "start") clearTimeout(timeoutID); // cancel next timestep
-    if (evt.data.toLowerCase() == "start") timestep();                                                  // kick off simulation
+    if (evt.data.toLowerCase() == "stop" || (evt.data.toLowerCase() == "start" && timeoutID != null)) clearTimeout(timeoutID); // cancel next timestep
+    if (evt.data.toLowerCase() == "start") timestep(false);                                             // kick off simulation
     return;
   }
 
@@ -83,13 +79,13 @@ onmessage = function (evt) {
   // lets assume something actually changed; so, in case we autopaused before, we should start again
   if (autopaused) {
     autopaused = false;
-    timestep();
+    timestep(false);
   }
 
 };
 
 // the actual math
-function timestep() {
+function timestep(oneStepOnly) {
 
   // first build the quadtree for Barnes-Hut
   // will have the following form: [{originx: 0, originy: 0, halfLength:1, depth:3, CoMx:1, CoMy:1, CoMm:1, children:[1,2,3,4]}, {...}, ]
@@ -234,7 +230,7 @@ function timestep() {
     var currentx = particles[i].x;
     var currenty = particles[i].y;
     var v = Math.sqrt(deltax*deltax + deltay*deltay);
-    if (v > quadtree[0].halfLength) { // enforces max speed, also deals with +/- Inf forces
+    if (v > quadtree[0].halfLength) { // enforces max speed, also deals with +/- Inf forces // TODO: allow for a configurable max speed
       deltax = Math.max(-Number.MAX_VALUE, Math.min(deltax, Number.MAX_VALUE) );
       deltay = Math.max(-Number.MAX_VALUE, Math.min(deltay, Number.MAX_VALUE) );
       deltax = deltax / ( (v == Infinity) ? Number.MAX_VALUE : v ) *  quadtree[0].halfLength;
@@ -256,11 +252,12 @@ function timestep() {
   // post deltas back if there's any; note that only sending deltas _can_ lead to desyncs (TODO check if this actually happens.. dont think so)
   // should look like: {"id1":{"dx":0, "dy":21}, "id2": {...}, ...}
   if (msgEmpty) {
+    postMessage("autopausing");
     autopaused = true;
   } else {
     postMessage(msg);
     // post a timeout for the next timestep based on target fps (and assuming this function runs instantly)
-    timeoutID = setTimeout(timestep, 1000/opt.targetfps);
+    if (opt.targetfps > 0) timeoutID = setTimeout(timestep, 1000/opt.targetfps);
   } 
  
 }

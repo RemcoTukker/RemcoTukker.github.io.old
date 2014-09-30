@@ -42,9 +42,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jade');
 
-  grunt.registerTask('default', ['jade', 'web', 'graphfile', 'watch']);
+  grunt.registerTask('default', ['jade', 'web', 'graphfile', 'jade', 'watch']);
   grunt.registerTask('crawl', ['web', 'graphfile']);
-  grunt.registerTask('publish', ['jade', 'crawl']);
+  grunt.registerTask('publish', ['jade', 'crawl', 'jade']);
   grunt.registerTask('server', ['web', 'watch']);
 
   grunt.registerTask('web', 'Start web server...', function() {
@@ -86,6 +86,124 @@ module.exports = function(grunt) {
     var minicrawler = require('./tools/minicrawler.js');
     minicrawler.processUrls(queue, 1, function(result) { // depth of one: dont crawl deeper
 
+        // clean up results.. for now, only keep local non-404 results TODO: add more stuff to graph
+        for (var page in result) {
+            // replace any localhost entries with relative links
+            if (page.indexOf('http://localhost:8001/', 0) == 0) {
+                // if we found our own root domain or a 404, completely remove it from the records (its not interesting..)
+                if (page == 'http://localhost:8001/' || result[page].statuscode == 404) {
+                    delete result[page];
+                    continue;
+                }
+
+                // strip the first part of the title because its just Remco Tukker --
+                result[page].title = result[page].title.slice(14);
+
+                // change main entry
+                var newEntry = page.slice(21);
+                result[newEntry] = result[page];
+                delete result[page];
+               
+            } else {
+                delete result[page];
+            }            
+        }
+
+        //second pass for further cleaning
+        for (var page in result) {
+            // if the entry doesnt have a title, take the last part of the url as a title
+            if (result[page].title === "") {
+                result[page].title = page.slice(page.lastIndexOf("/", page.length - 1) + 1);
+            }
+            if (result[page].description === "") {
+                result[page].description = "[No description given]";
+            }
+
+        }
+
+        // set some initial positions based on a spiral
+        var r = 30;
+        var theta = 0;
+        var nodes = {};
+        for (var page in result) {
+          nodes[page] = {}; 
+          nodes[page].x = r * Math.cos(theta);
+          nodes[page].y = r * Math.sin(theta);
+          //result[page].x = r * Math.cos(theta);          
+          //result[page].y = r * Math.sin(theta);
+          theta += 1.2;
+          r += 5;
+        }
+
+        console.log(nodes);
+
+        // use physics code to find stable initial position in graph for each node TODO: nodes[id].edges to be added
+        var Worker = require('webworker-threads').Worker;
+        var physicsWorker = new Worker('static/js/physics.js');
+        physicsWorker.addEventListener("message", function (evt) {
+          if (typeof evt.data == 'string' && evt.data == 'autopausing') {
+            // physics converged, write the svg file
+            console.log('almost done!');
+            console.log(nodes);
+            // write the graph.svg file
+
+            function nodeSVGString(id, x, y, link, text) {
+              var nodeString = "";
+              nodeString += '    <g id="' + id + '" class="graphnode" transform="translate(' + x + ',' + y + ')" >\n';
+              var rx = Math.max(6*text.length, 50); // TODO maybe improve this
+              var ry = 45;
+              nodeString += '     <ellipse cx="0" cy="0" rx="' + rx + '" ry="' + ry + '" fill="url(#gradient1)" />\n';
+              nodeString += '     <a xlink:href="' + link + '"> <text x="0" y="5" text-anchor="middle">' + text + '</text> </a>\n';
+              nodeString += '    </g>\n';
+              return nodeString;
+            }
+
+                    
+            var svgstring = '<svg version="1.1" baseProfile="full" width="400" height="600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid" id="svggraph" style="overflow: hidden;">\n'
+
+            // add the defs of the gradients and so on
+            svgstring += fs.readFileSync("svgbuilding/defs.xml", "utf8");
+
+            // start of node section
+            svgstring += '  <g mask="url(#Mask)" > \n   <g id="svgpanzoom" transform="matrix(1,0,0,1,200,300)" >\n';
+
+            // add nodes
+            for (var page in result) {
+                svgstring += nodeSVGString(page, nodes[page].x, nodes[page].y, page, result[page].title);
+            }
+
+            svgstring += '   </g>\n  </g>\n';
+            // end of node section
+
+            // add scripts
+            svgstring += '  <script type="text/javascript"><![CDATA[\n';
+            svgstring += fs.readFileSync("svgbuilding/svgscripts.js", "utf8");
+            svgstring += '  ]]></script>\n';
+
+            svgstring += "</svg>";
+
+            fs.writeFileSync('static/img/graph2.svg', svgstring);
+            done(); // let grunt know we're finished
+
+
+          } else {
+            // update positions
+            for (var i in evt.data) {
+              nodes[i].x += evt.data[i].dx;
+              nodes[i].y += evt.data[i].dy;
+            }
+            physicsWorker.postMessage("start"); // next step
+          }
+        
+        });
+        physicsWorker.postMessage(nodes); 
+        physicsWorker.postMessage({targetfps:0}); // in order not to run into settimeout code, on which webworker-threads hangs
+        physicsWorker.postMessage("start"); // start the worker.
+
+
+
+
+/* old code for writing a separate 
         // first clean up a bit: remove links to self, remove localhost references, and prune the network a bit
         for (var page in result) {
             for (var linkto in result[page].links) {
@@ -181,7 +299,7 @@ module.exports = function(grunt) {
         
         fs.writeFileSync('./graph.json', JSON.stringify(visjsdata, null, 2));
         done(); // let grunt know we're finished
-
+*/
 
 // old code; we're not using a DOT file anymore but the format visjs uses natively
 /*
