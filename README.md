@@ -18,8 +18,10 @@ This is the repository containing my personal website that is hosted on Github P
 
 ### Website infrastructure and design
 
-Files in the main directory and the layouts, static and tools are part of the site infrastructure and are licensed under an Apache v2 license, unless stated otherwise. I considered using GPL v3, but that can result in issues when using the code to present CC BY 4.0 content with it. The license can be found in the CODE-LICENSE.txt file or at [http://www.apache.org/licenses/LICENSE-2.0.html](http://www.apache.org/licenses/LICENSE-2.0.html)
+Files in the main directory and the layouts, static and tools directory are part of the site infrastructure and are licensed under an Apache v2 license, unless stated otherwise. I considered using GPL v3, but that can result in issues when using the code to present CC BY 4.0 content with it. The license can be found in the CODE-LICENSE.txt file or at [http://www.apache.org/licenses/LICENSE-2.0.html](http://www.apache.org/licenses/LICENSE-2.0.html). 
 
 ### Website content
 
-Files in the folders that have a name starting with a capital letter are part of the website content and are licensed under a CC BY 4.0 license, unless stated otherwise. The license can be found in the CONTENT-LICENSE.txt file or at [https://creativecommons.org/licenses/by/4.0/](https://creativecommons.org/licenses/by/4.0/)
+Files in the folders that have a name starting with a capital letter are part of the website content and are licensed under a CC BY 4.0 license, unless stated otherwise. The license can be found in the CONTENT-LICENSE.txt file or at [https://creativecommons.org/licenses/by/4.0/](https://creativecommons.org/licenses/by/4.0/).
+
+Note, images are part of the content; TODO: better organize stuff to more clearly seperate CC BY 4.0 licensed stuff from Apache V2 licensed stuff..

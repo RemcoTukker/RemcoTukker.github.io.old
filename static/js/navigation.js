@@ -2,19 +2,7 @@
 var baseUrl = location.href.match(/^http:\/\/[^/]+/)[0];
 var graphUrl = baseUrl + '/graph.json';
 console.log(graphUrl);
-var graph = null;
 
-//check if we're at the main index page
-// (if so, we always want to show the navigation graph and not the image behind)
-if (baseUrl + '/' === location.href) { 
-    $("#contentcontainer").fadeOut(0); 
-    $("#graphcontainer").css({'visibility':'visible', 'z-index':20}).fadeIn(0);
-} 
-
-// one large object to control the fading state
-// TODO: one problem remains: the first time we're fading in, it doesnt work properly for some reason that has to do with the CSS
-//       (the complete function is fired too quickly)
-//       however, if we fix that, somehow the graph is not drawing anymore at all... see what is actually the problem there.. (probably visjs)
 var fadingState = {
     atrootpage: (baseUrl + '/' === location.href) ? true : false,
     navigationOpen: (baseUrl + '/' === location.href) ? true : false,
@@ -32,71 +20,32 @@ var fadingState = {
     },
     openNavigation: function() {
         var self = this;
-        $("#contentcontainer").fadeOut(); 
-        $("#graphcontainer").css({'visibility':'visible', 'z-index':20}).fadeIn(function() {
+        $("#maincontainer").fadeOut(function() {
             self.navigationOpen = true; 
             self.checkLinkFollowing();
-        });
+        }); 
     },
     closeNavigation: function() {
         if (this.atrootpage) return;
         var self = this;
-        $("#contentcontainer").fadeIn();
-        $("#graphcontainer").css({'z-index':0}).fadeOut(function() {self.navigationOpen = false; });
+        $("#maincontainer").fadeIn(function() {self.navigationOpen = false; });
     },
     switchNavigation: function() {
         if (this.navigationOpen) this.closeNavigation(); else this.openNavigation();
-	// TODO: see if we can keep at the same scrolling position (right now it goes to top of page when hiding navigation again)
     },
     followLocalLink: function(href) {
         this.followingLink = true;
         this.openNavigation();
         var self = this;
         $.get(href, function(data, status, jqxhr){
-            self.newPage = $.parseHTML(data);
-            //TODO (actually check what happens with scripts now and if jquery can do something for us)
-            // first hunt down any css and javascript in the page and add it at the end of the head for css and 
-            // also keep track of it, in order to remove it again when we leave the page (maybe even use a module 
-            // pattern for the JS so that we can actually free the memory again when we leave? that would be really neat!) => require.js
-            
+            self.newPage = $.parseHTML(data, null, true);  
+            // careful with the keepscripts: make sure content doesnt leak javascript to other pages
+            // thus, best to use some kind of module pattern, maybe with require.js, to unload scripts after use, or wrap everything in its own closure..
+            // same goes for CSS I guess, but I dont know how to do that yet
             self.checkLinkFollowing();
         });
     },
 };
-
-
-// get the information for drawing the dynamic navigation menu
-$.get(graphUrl, function(data, status, jqxhr){
-    //TODO: test for errors and so on
-
-    //make some pretty colors
-    for (var i = 0; i < data.nodes.length; i++) {
-        if (data.nodes[i].url.indexOf(':') == -1) data.nodes[i].color = 'green';    
-        if (data.nodes[i].statuscode == 404) data.nodes[i].color = 'red';
-        if (data.nodes[i].statuscode == 301) data.nodes[i].color = 'orange';  
-    }
-
-   
-    //draw the graph :-)
-    graph = new vis.Network($("#graphcontainer").get(0), data);
-
-    //add links to pages!
-    graph.on('select', function(props) {
-        // this works, but TODO we have to calculate the proper coordinates and translate it during animation (see focusOnNode in visjs )        
-        //graph._setTranslation(1,1);
-        //graph.redraw();
-
-    });
-
-    graph.on('doubleClick', function(props) {
-        console.log(JSON.stringify(props));
-        console.log(graph.nodesData.get(props.nodes[0]).label); //this is the label we shouild link to
-        if (linkClicked(graph.nodesData.get(props.nodes[0]).url)){
-            //wasnt touched by linkClicked because it was an external link, so send browser there ourselves
-            window.location = graph.nodesData.get(props.nodes[0]).url;
-        };
-    });
-});
 
 // object that keeps track of the path that the user has taken throughout our website
 var breadcrumbs = {
@@ -122,13 +71,16 @@ var breadcrumbs = {
 };
 
 // pass on the return value of linkClicked (return value of false prevents normal/further handling of the link click)
-$(document).on("click", "a", function() { return linkClicked($(this).attr("href")); }); 
+$(document).on("click", "a", function() { 
+  if (typeof $(this).attr("href") !== "undefined") return linkClicked($(this).attr("href"));
+  if (typeof $(this).attr("xlink:href") !== "undefined") return linkClicked($(this).attr("xlink:href")); // links in the svg look like this
+}); 
 
 // This function intercepts link clicks to add animations if we move to other parts of this website
 // This works perfectly under two conditions: links to other parts of this website are relative and they dont contain colons (":")
 // So, just keep it simple and satisfy those two conditions, they're ok general rules anyway!
 function linkClicked(href) {
-    //console.log(this);
+    console.log("link clicked " + href);
     // However, extension to cover those two conditions as well is not particularly hard, eg use document.URL to check whether we stay at the same website
     // and use URI.js to help with url parsing. (only relative links that include a : but not a / before the : will always stay nasty.
     // that has nothing to do with us though)
@@ -173,8 +125,6 @@ $(window).on("popstate", function(e) {
     breadcrumbs.compareAndMerge(e.originalEvent.state);    
     window.history.replaceState(breadcrumbs.hist, "title: " + location.href);
     fadingState.followLocalLink(location.href);
-    //return false; // this should prevent browser from jumping to top of page (doesnt work)
-	//TODO: see what is actually causing this scroll... only tested in FF so far
 });
 
 // this is fired when navigating back from a different website for example, or restarting browser (popstate isnt fired in those cases)
@@ -195,3 +145,4 @@ $(window).on("keydown", function(e) {
 $(window).on( "keyup", function(e) {
     if (e.which == 90) zpressed = false;
 });
+

@@ -43,7 +43,7 @@ onmessage = function (evt) {
   // first check if we have a start / stop message (or another string), and if so, do whats requested and return
   if (typeof evt.data == 'string') {
     if (evt.data.toLowerCase() == "stop" || evt.data.toLowerCase() == "start") clearTimeout(timeoutID); // cancel next timestep
-    if (evt.data.toLowerCase() == "start") timestep();                                                  // kick of simulation
+    if (evt.data.toLowerCase() == "start") timestep();                                                  // kick off simulation
     return;
   }
 

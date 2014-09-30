@@ -3,5 +3,9 @@ extends layouts/default
 block vars
   - var pageTitle = 'Home'
 
-block content
-  include:md index.md
+block styles
+  style(type='text/css').
+    #maincontainer { display: none;}
+//    #contentcontainer { opacity: 0;}
+//    #contentcontainer { display: none; z-index: 0;}
+

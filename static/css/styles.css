@@ -1,52 +1,131 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: black;
-  color: #bbbbbb;
-  overflow: hidden;
-}
+
+/*@font-face {
+  font-family: 'Merriweather-Light';
+  src: url('Merriweather-Light.ttf') format('truetype'); *//* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */ /* TODO make a WOFF file out of it*/
+/*}*/
+
 /* The overflow: hidden stuff is just to prevent browser from scrolling to top when back 
+   The height and min-height is to make sure background image has full screen available on chrome mobile..
    button is clicked.. ugly, but effective*/
 html {
   overflow: hidden;
+  height:100%;
+  min-height:100%;
 }
 
-#maincontainer,
-#graphcontainer {
+body {
+  /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; *//*get better fonts and embed them as WOFF*/
+  background-color: black;
+  color: #bbbbbb;
+  overflow: hidden;
+
+  min-height: 100%; /* to make sure android mobile doesnt make our body 0 pxls high and not show our background*/
+  background: url(/static/img/newhead5.jpg) no-repeat; 
+  background-position: bottom left;
+  background-size: cover;
+  background-attachment: fixed; 
+  font-family: 'Neuton', serif;
+}
+
+#maincontainer {
+  z-index: 2;
   width: 100%;
   height: 100%;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0px;
+  left: 0px;
+  background: black;
 }
 
-#graphcontainer {
-  visibility: hidden;
+#navigationlink { /* TODO fix this better */
+  background: url('/static/img/brain1color3.png') no-repeat;
+  background-size: cover;
+  height: 128px;
+  width: 128px; 
+  max-width: 80%;
+  display: block;
+  margin: 5% auto;
 }
 
-/* the following clearly needs to be improved to be appealing at different resolutions*/
+#svggraph {
+  z-index: 1;
+  position: absolute;
+  left:0; top:0; width:100%; height:100%;
+  /* prevent text selection when dragging nodes */
+  -webkit-user-select: none;  
+  -moz-user-select: none;     
+  -ms-user-select: none;  
+  user-select: none;    
+}
+
 #sidebarcontainer {
-  z-index: 30;
-  float: left;
-  width: 200px;
+  width: 12%;
   height: 100%;
   position: absolute;
 }
 
-#contentcontainer {
-  z-index: 10;
-  float: right;
-  margin-left: 250px;
-  height: 100%;
-  position: absolute;
-  overflow: auto;
+
+#contentwrapper {
+  overflow: auto; /* overflow-y hidden should be set from javascript if we want to add our own slider */
+  margin-left: 12%;
+  padding-left: 13%;
+  padding-right: 16%;
+  height: 100%;  
+  width: 59%;
 }
-/*
-#contentcontainer {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+
+#toppadding {
+  height: 7%;
 }
-*/
+
+#bottompadding {
+  height: 20%;
+}
+
+#contentcontainer {
+}
+
+/* small window widths, eg mobile. TODO: proper scaling and positioning of brain icon */
+@media (max-width: 700px) {
+  #sidebarcontainer {
+    width: 100%;
+    height: 64px;
+  }
+  
+  #contentwrapper {
+    margin-top: 64px;
+    padding-left: 3%;
+    padding-right: 2%;
+    margin-left: 0;
+    width: 95%;
+  }
+}
+
+
+/* CSS for actual content */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+  margin: 12% 0 8% 0 ; /* top, right, bottom, left */
+  text-align: center;
+}
+
+h2 { margin: 10% 0 4% 0; }
+h3 { margin: 4% 0 3% 0; }
+/*h4 { margin: 4% 0; }*/
+/*h5 { margin: 3% 0; }*/
+/*h6 { margin: 2% 0; }*/
+ 
+img.normalimage {
+  display:block;
+  margin: 5% auto;
+  max-width: 80%;
+  width: auto;
+}
+
+a:link { color: #0aa595; }
+a:visited { color: #820675; }
+a:hover { text-decoration:none; }

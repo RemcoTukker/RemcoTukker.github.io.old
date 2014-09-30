@@ -14,15 +14,15 @@
 
 While working on the Ostrichbot I noticed that the mounting holes of a HXT900-like microservo are exactly the right size for an old bicycle spoke (yeah, I'm Dutch). This solved one of my construction problems, namely how to create a slightly flexible, but still sturdy leg for a robot, and gave me the idea for a simplified Ostrichbot. Here are photos of Stiltbots compliant leg:
 
-![Stiltbot leg](leg.jpg "Stiltbot leg")
+<p><img class="normalimage" src="leg.jpg" alt="Stiltbot leg" title="Stiltbot leg"></p>
 
-![Mounting of spoke to servo](knee.jpg "Mounting of spoke to servo")
+<p><img class="normalimage" src="knee.jpg" alt="Mounting of spoke to servo" title="Mounting of spoke to servo"></p>
 
 I bent the spoke so that it fits through the two mounting holes exactly, and the screw thread in the right position to fasten it at one of the mounting holes with the matching spoke nipple. If you want to do this yourself, use steel spokes and make sure you have the right spoke diameter (there's three standard diameters, don't know which one I used at the moment). This gives a quite nice compliant foot for robots of 100 to 500 grams (guesstimate). Of course, you can also bent the lower end of the spoke into a shape that gives you a larger support surface.
 
 So, how to make a Stiltbot now? Use a bit of the mounting material to connect the servo horns on the leg servos, and also connect the last servo that will be used for right-left balance. All the rest of the material, battery, accelero, BEC and uController will go on another piece of mounting material that is connected to the balance servo horn (see drawing). Ideally, this shouldn't be too heavy, I was thinking around 100g only.
 
-![Drawing of Stiltbot construction](stiltbot_frame.jpg "Drawing of Stiltbot construction")
+<p><img class="normalimage" src="stiltbot_frame.jpg" alt="Drawing of Stiltbot construction" title="Drawing of Stiltbot construction"></p>
 
 Wire everything up, write some software, and that's all! Well... Of course, the reason that this is a hypothetical bot and not a real bot is that the "write some software" part is rather hard. As you may have noticed, we dont have a foot on our leg or even an "ankle" actuator, which means we can only balance the robot by moving the "hip" actuator and changing the angle between the body and the leg. This is a situation that is studied extensively with the so-called [Acrobot](http://www.cc.gatech.edu/projects/acrobot/). So, luckely, at least it is theoretically possible to balance this robot. 
 

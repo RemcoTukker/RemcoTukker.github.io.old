@@ -1,0 +1,27 @@
+doctype html
+html
+  block vars
+  head
+    meta(charset='utf-8')
+    title Remco Tukker &mdash; #{pageTitle}
+    block description
+    // main styles
+    link(href="/static/css/styles.css", rel="stylesheet")
+    script(src="/static/js/jquery-2.1.1.js")
+    script(src="/static/js/vis.js")
+    link(rel="stylesheet", type="text/css", href="http://fonts.googleapis.com/css?family=Neuton:300")
+    link(href="http://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css")
+    // alternative: allegreya and lato
+    block styles
+  body
+    include ../static/img/graph.svg
+    block mainblock
+        
+
+    // main javascript
+    script(src="/static/js/navigation.js")
+    block scripts
+    block analytics
+      //script.
+      // google analytics code, etc...
+

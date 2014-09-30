@@ -1,30 +1,12 @@
-doctype html
-html
-  block vars
-  head
-    meta(charset='utf-8')
-    title Remco Tukker &mdash; #{pageTitle}
-    block description
-    // main styles
-    link(href="/static/css/styles.css", rel="stylesheet")
-    script(src="/static/js/jquery-2.1.1.js")
-    script(src="/static/js/vis.js")
-    block styles
-  body
-    #graphcontainer
-      block navigation
-    #maincontainer
-      #sidebarcontainer
-        a(href="/", class="navigationlink")
-          img(align="left",src="/static/img/I-icon.png",border=0,width=64,height=64)
-        block sidebar
+extends base
+
+block mainblock
+  #maincontainer
+    #sidebarcontainer
+      a(href="/", id="navigationlink")
+      block sidebar
+    #contentwrapper
+      #toppadding
       #contentcontainer
         block content
-
-    // main javascript
-    script(src="/static/js/navigation.js")
-    block scripts
-    block analytics
-      //script.
-      // google analytics code, etc...
-
+      #bottompadding
