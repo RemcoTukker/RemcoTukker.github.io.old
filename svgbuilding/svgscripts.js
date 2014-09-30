@@ -22,10 +22,8 @@ var addAnimationToGraph = function(config) {
     var nodes = {};
     var nodeNrs = {};
     for (var i = 0; i < nodeElements.length; i++) {
-        var TF = nodeElements[i].getAttribute("transform");  
-        var x = parseFloat(TF.substring(TF.indexOf("(") + 1));   // TODO use neater method from panzoom code for handling TFs
-        var y = parseFloat(TF.substring((TF.lastIndexOf(",") + 1 ) || (TF.lastIndexOf(" ") + 1 ) ));
-        nodes[nodeElements[i].id] = {x:x, y:y, edges:[]}; // TODO edges to be added later
+        var tf = nodeElements[i].transform.baseVal.getItem(nodeElements[i].transform.baseVal.numberOfItems - 1);
+        nodes[nodeElements[i].id] = {x:tf.matrix.e, y:tf.matrix.f, edges:[]}; // TODO edges to be added later
         nodeNrs[nodeElements[i].id] = i; // for later reference
     }
     // TODO also read edge elements from the svg
@@ -44,10 +42,10 @@ var addAnimationToGraph = function(config) {
 
         var node = nodeElements[nodeNrs[i]]; // look up the node thats associated with this ID
 
-        var oldTF = node.getAttribute("transform");
-        var oldx = parseFloat(oldTF.substring(oldTF.indexOf("(") + 1));
-        var oldy = parseFloat(oldTF.substring((oldTF.lastIndexOf(",") + 1 ) || (oldTF.lastIndexOf(" ") + 1 ) ));
-        node.setAttribute("transform", "translate(" + (oldx + evt.data[i].dx) + "," + (oldy + evt.data[i].dy) + ")"); //TODO use neater method from panzoom code for updating transforms
+        var tf = node.transform.baseVal.getItem(node.transform.baseVal.numberOfItems - 1);  // TODO just keep an object with references to all tf matrices
+        var tfMatrix = tf.matrix;
+        tfMatrix = tfMatrix.translate(evt.data[i].dx, evt.data[i].dy);
+        tf.setMatrix(tfMatrix);
       }
     });
 
@@ -106,13 +104,12 @@ var addAnimationToGraph = function(config) {
       previousx = evt.clientX;
       previousy = evt.clientY;
 
-      // parse the existing transform and add the dx / dy
-      var oldTF = dragging.getAttribute("transform");
-      var oldx = parseFloat(oldTF.substring(oldTF.indexOf("(") + 1));
-      var oldy = parseFloat(oldTF.substring((oldTF.lastIndexOf(",") + 1 ) || (oldTF.lastIndexOf(" ") + 1 ) )); // TODO use new fancy code from panzoom
+      var tf = dragging.transform.baseVal.getItem(dragging.transform.baseVal.numberOfItems - 1);
+      var tfMatrix = tf.matrix;
+      tfMatrix = tfMatrix.translate(dx, dy);
+      tf.setMatrix(tfMatrix);
 
-      dragging.setAttribute("transform", "translate(" + (oldx + dx) + "," + (oldy + dy) + ")");
-      updatePhysicsWorkerWhenDraggingNode(dragging.id, oldx + dx, oldy + dy, oldx, oldy);
+      updatePhysicsWorkerWhenDraggingNode(dragging.id, newPt.x, newPt.y, oldPt.x, oldPt.y);  // check if we are feeding the right data here actually, it was oldx / oldx+dx
       return false;
     }
 
