@@ -1,7 +1,5 @@
 
 var baseUrl = location.href.match(/^http:\/\/[^/]+/)[0];
-var graphUrl = baseUrl + '/graph.json';
-console.log(graphUrl);
 
 var fadingState = {
     atrootpage: (baseUrl + '/' === location.href) ? true : false,
