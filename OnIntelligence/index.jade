@@ -1,0 +1,10 @@
+extends ../layouts/default
+
+block description
+  meta(name='description', content='Discussion of the book On Intelligence by Jeff Hawkins')
+
+block vars
+  - var pageTitle = 'On Intelligence'
+
+block content
+  include:md README.md

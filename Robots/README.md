@@ -50,6 +50,7 @@ I'm currently working on this robot. It's a robot inspired by running birds, and
 ### Relevant links
 * Great video material of running ostrich: [University of Western Australia Muscle Function and Locomotion Lab](http://mfll-uwa.jonasrubenson.com/Comparative.html)
 * Some inspiration: [MIT Leg Lab Robots on Youtube](https://www.youtube.com/watch?v=vHjVV7AWaGM)
+* Bipedal running robot at university of Tokyo: [ACHIRES](http://www.k2.t.u-tokyo.ac.jp/fusion/BipedalRunning/)
 
 ## Dotty
 

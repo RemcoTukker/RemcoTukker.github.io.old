@@ -1,0 +1,10 @@
+extends ../layouts/default
+
+block description
+  meta(name='description', content='New page')
+
+block vars
+  - var pageTitle = 'New page'
+
+block content
+  include:md README.md
