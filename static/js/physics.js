@@ -22,12 +22,12 @@ var autopaused = false;
 
 // variable for the options / settings of the simulation (all lowercase keys so that we can do toLowerCase() preventing user frustration)
 var opt = {
-  gravity: -8000,                 // attraction / repulsion between the particles, approximated by Barnes-Hut
+  gravity: -20000,                 // attraction / repulsion between the particles, approximated by Barnes-Hut
   oneovertheta: 2,               // for Barnes-Hut approximation
   maxquaddepth: 64,              // how deep the quadtree is allowed to get before merging particles into same quad; 64 gives a pretty good range
   centeringforce: 0.00001,       // for the center pointing 'gravity'
-  friction: 1.2,                 // should be >= 0   ; 0.9 seems ok
-  springlength: 30,              // equilibrium length of springs
+  friction: 2,                 // should be >= 0   ; 0.9 seems ok
+  springlength: 50,              // equilibrium length of springs
   springconstant: 1,
   reciprocalspring: false,       // whether a spring should exert a force on both nodes or only on the initiating side of an edge
   targetfps: 60,                 // should be > 0

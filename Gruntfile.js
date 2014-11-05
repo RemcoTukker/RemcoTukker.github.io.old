@@ -70,7 +70,7 @@ module.exports = function(grunt) {
 
     // first check on the disk which urls to enqueue initially
     var fs = require('fs'); // great that we can use core node modules here! :-)
-    var skipdirs = {'static':'','node_modules':'','layouts':'', '.git':'', 'tools':''}; //these dirs dont contain content
+    var skipdirs = {'static':'','node_modules':'','layouts':'', '.git':'', 'tools':'', 'newpage':''}; //these dirs dont contain content
 
     var queue = [];
     var files = fs.readdirSync('./'); // hrm where is this actually reading? I suppose dir where grunt is run.. or dir where gruntfile is?
