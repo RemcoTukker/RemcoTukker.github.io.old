@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Remco Tukker &mdash; Thermodynamics</title>
+    <meta name="description" content="The 2nd Law of Thermodynamics">
+    <!-- main styles-->
+    <link href="/static/css/styles.css" rel="stylesheet">
+    <script src="/static/js/jquery-2.1.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Neuton:300">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+    <!-- alternative: allegreya and lato-->
+  </head>
+  <body><svg version="1.1" baseProfile="full" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid" id="svggraph" style="overflow: hidden;">
+  <defs>
+      <!-- gradient for the text ellipses -->
+      <radialGradient id="gradient1" >
+        <stop offset="0%" stop-color="white" stop-opacity="1" />
+        <stop offset="50%" stop-color="white" stop-opacity="1" />
+        <stop offset="100%" stop-color="white" stop-opacity="0" />
+      </radialGradient>
+
+      <!-- mask with gradient for the fading at the edges.. -->
+      <radialGradient id="Gradient" >
+        <stop offset="0" stop-color="white" />  
+        <stop offset="0.7" stop-color="white" />
+        <stop offset="1" stop-color="black" />
+      </radialGradient>
+      <mask id="Mask" draggable="false">   
+        <rect x="0" y="0" width="100%" height="100%" fill="url(#Gradient)" />
+      </mask>
+
+  </defs>
+  <g mask="url(#Mask)" > 
+   <g id="svgpanzoom" transform="matrix(1,0,0,1,200,300)" >
+    <g id="/Thermodynamics/" class="graphnode" transform="translate(62.36256834621664,6.522083582540807)" >
+     <ellipse cx="0" cy="0" rx="90" ry="45" fill="url(#gradient1)" />
+     <a xlink:href="/Thermodynamics/"> <text x="0" y="5" text-anchor="middle"> Thermodynamics</text> </a>
+    </g>
+    <g id="/Scheduling/" class="graphnode" transform="translate(3.1100398010366224,101.86875247451867)" >
+     <ellipse cx="0" cy="0" rx="66" ry="45" fill="url(#gradient1)" />
+     <a xlink:href="/Scheduling/"> <text x="0" y="5" text-anchor="middle"> Scheduling</text> </a>
+    </g>
+    <g id="/SVGPanZoom/" class="graphnode" transform="translate(-95.22322046428617,45.80064383094631)" >
+     <ellipse cx="0" cy="0" rx="78" ry="45" fill="url(#gradient1)" />
+     <a xlink:href="/SVGPanZoom/"> <text x="0" y="5" text-anchor="middle"> SVG Pan Zoom</text> </a>
+    </g>
+    <g id="/Robots/" class="graphnode" transform="translate(-39.08679241490602,-79.90232803814438)" >
+     <ellipse cx="0" cy="0" rx="50" ry="45" fill="url(#gradient1)" />
+     <a xlink:href="/Robots/"> <text x="0" y="5" text-anchor="middle"> Robots</text> </a>
+    </g>
+    <g id="/Experiments/" class="graphnode" transform="translate(93.05133202884129,-52.19769654048426)" >
+     <ellipse cx="0" cy="0" rx="72" ry="45" fill="url(#gradient1)" />
+     <a xlink:href="/Experiments/"> <text x="0" y="5" text-anchor="middle"> Experiments</text> </a>
+    </g>
+    <g id="/AboutWebsite/" class="graphnode" transform="translate(-36.217357524978304,50.21101926693949)" >
+     <ellipse cx="0" cy="0" rx="84" ry="45" fill="url(#gradient1)" />
+     <a xlink:href="/AboutWebsite/"> <text x="0" y="5" text-anchor="middle"> About Website</text> </a>
+    </g>
+    <g id="/AboutMe/" class="graphnode" transform="translate(-90.08675455924588,-28.487063137647326)" >
+     <ellipse cx="0" cy="0" rx="54" ry="45" fill="url(#gradient1)" />
+     <a xlink:href="/AboutMe/"> <text x="0" y="5" text-anchor="middle"> About Me</text> </a>
+    </g>
+   </g>
+  </g>
+  <script type="text/javascript"><![CDATA[
+
+// TODO we can move this code to a separate repo as well :-)
+var addAnimationToGraph = function(config) {
+
+    var defaultConfig = {
+        svgID: "svg",             // ID of the svg element that should catch mouse clicks and touches
+    }
+    config = config || {};
+    for (var key in defaultConfig) if (typeof config[key] == "undefined") config[key] = defaultConfig[key];
+
+    // our reference to the svg that contains the nodes
+    var svg = document.getElementById(config.svgID);       
+
+    // variables for dragging nodes 
+    var dragging = null;           // this will contain a reference to the node that is being dragged
+    var previousx, previousy;      // previous x and y coordinates
+
+
+    // first read the existing graph 
+    // create an object with references to all our existing graph nodes
+    nodeElements = document.getElementsByClassName('graphnode'); // svg.getElementsByClassName gives an error in IE; it would be better though
+    var nodes = {};
+    var nodeNrs = {};
+    for (var i = 0; i < nodeElements.length; i++) {
+        var tf = nodeElements[i].transform.baseVal.getItem(nodeElements[i].transform.baseVal.numberOfItems - 1);
+        nodes[nodeElements[i].id] = {x:tf.matrix.e, y:tf.matrix.f, edges:[]}; // TODO edges to be added later
+        nodeNrs[nodeElements[i].id] = i; // for later reference
+    }
+    // TODO also read edge elements from the svg
+
+
+    // instantiate physics worker
+    var physicsWorker = new Worker("/static/js/physics.js");  
+    // TODO: make this a data URI
+    // TODO: allow for overriding the default config of the physics worker from here
+
+    // sending and receiving messages from the worker
+    physicsWorker.addEventListener("message", function (evt) {
+      if (evt.data == 'autopausing') return;
+      for (var i in evt.data) {
+        if (dragging != null && dragging.id == i) continue; // dont update position of a node that we are currently dragging
+
+        var node = nodeElements[nodeNrs[i]]; // look up the node thats associated with this ID
+
+        var tf = node.transform.baseVal.getItem(node.transform.baseVal.numberOfItems - 1);  // TODO just keep an object with references to all tf matrices
+        var tfMatrix = tf.matrix;
+        tfMatrix = tfMatrix.translate(evt.data[i].dx, evt.data[i].dy);
+        tf.setMatrix(tfMatrix);
+      }
+    });
+
+    function updatePhysicsWorkerWhenDraggingNode(nodeId, x, y, oldx, oldy) {
+      // send the current info of node with id nodeId to the physicsworker (x, y and maybe also do the xold and yold)
+      var msg = {};
+      msg[nodeId] = {x:x, y:y, xold: oldx, yold: oldy};
+      physicsWorker.postMessage(msg);
+    }
+
+
+    // update the node info in the worker in the following way:
+    // {"node1":{mass:1, x:30, y:40, edges:["node2", ... ]}, "node2":{...}}
+    // nodes or properties that are not mentioned are assumed unchanged; remove a node by putting its mass to 0
+    // nodes are added when they are mentioned with default mass 1 and default location at the origin
+    //var testgraph = {"1":{edges:["2","3"]}, "2":{edges:["1"]}, "3":{edges:["1"]}};
+    physicsWorker.postMessage(nodes); 
+    physicsWorker.postMessage("start"); // start the worker.
+    //physicsWorker.postMessage("stop"); // pause the worker.
+
+    // TODO expose starting / stopping animation as an interface of this module
+
+
+    // code for dragging of nodes
+    function nodeMouseDown(evt) {
+      // find out if its a mouse down on a graphnode (we may get ellipse in the group here or the text inside the ahref inside the group)
+      //  ... yes, the following is fragile... dont do any extra nesting in the graphnode for now; TODO: improve, search upwards till you either found a graphnode or reached top of svg
+      if (evt.target.parentNode.className.baseVal != "graphnode") return; // && evt.target.parentNode.parentNode.className.baseVal != "graphnode") return;
+
+      evt.stopPropagation(); // if youre touching a node, we dont want to pan the image at the same time
+      
+      // if (evt.target.tagName.toLowerCase() != "ellipse") return; // only drag the node when you touch the ellipse (not the text/hyperlink)
+      if (evt.target.tagName.toLowerCase() == "text") return; // dont interfere with hyperlink dragging
+     
+      dragging = evt.target.parentNode;
+      previousx = evt.clientX;
+      previousy = evt.clientY;
+      
+      return false;
+    }
+
+    // Convert screen-based coordinates (eg from mouse events) into the panzoom coordinate system
+    function screenToPanZoomCoords(x, y) {
+      var pt = svg.ownerSVGElement.createSVGPoint();  // TODO use ownerSVGElement properly, also in the panzoom code to fix bug if svgID is not the actual svg
+      pt.x = x;
+      pt.y = y;
+      return pt.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    function nodeMouseMove(evt) {
+      if (!dragging) return;
+      var oldPt = screenToPanZoomCoords(previousx, previousy);
+      var newPt = screenToPanZoomCoords(evt.clientX, evt.clientY);
+      var dx = newPt.x - oldPt.x;
+      var dy = newPt.y - oldPt.y;
+      previousx = evt.clientX;
+      previousy = evt.clientY;
+
+      var tf = dragging.transform.baseVal.getItem(dragging.transform.baseVal.numberOfItems - 1);
+      var tfMatrix = tf.matrix;
+      tfMatrix = tfMatrix.translate(dx, dy);
+      tf.setMatrix(tfMatrix);
+
+      updatePhysicsWorkerWhenDraggingNode(dragging.id, newPt.x, newPt.y, oldPt.x, oldPt.y);  // check if we are feeding the right data here actually, it was oldx / oldx+dx
+      return false;
+    }
+
+    function nodeMouseUp(evt) {
+      dragging = null;
+    }
+
+    function nodeDragStart(evt) {
+      if (evt.target.parentNode.className.baseVal != "graphnode") return; // TODO: improve, just as above
+      evt.stopPropagation();
+       // we may get "a" here for a link or "ellipse" or other stuff of course..
+      if (evt.target.tagName.toLowerCase() == "a") return; // dont interfere with hyperlink dragging
+      evt.preventDefault(); // but otherwise, dont even think about dragging my elements!
+    }
+
+    // adding the event listeners
+    svg.addEventListener('mousedown', nodeMouseDown );
+    svg.addEventListener('mousemove', nodeMouseMove );
+    svg.addEventListener('dragstart', nodeDragStart ); 
+    svg.addEventListener('mouseup', nodeMouseUp );
+    svg.addEventListener('dragend', nodeMouseUp );   // to stop node from being captured after dragging hyperlink
+    svg.addEventListener('mouseleave', nodeMouseUp ); 
+
+    // TODO also add touch events, just like with panzoom code
+};
+
+addAnimationToGraph({svgID: "svgpanzoom"});
+
+
+// TODO get this from github repo when building this svg
+// adding pan/zoom interaction to the graph
+var addPanZoomToSVG = function(config) {
+
+    /* ===== take care of config ===== */
+    var defaultConfig = {
+        svgID: "svg", // ID of the svg element that should catch mouse clicks and touches
+        panzoomID: "panzoom", // ID of the element that should be panzoomed
+        scrollSpeed: 5, // Speed of scroll zooming
+        pinchSpeed: 1, // Speed of pinch zooming (5 times smaller than scrollSpeed is an ok choice)
+        upOnMouseOut: false // treat mouse leaving svg area as a mouseup event
+    }
+
+    config = config || {};
+    for (var key in defaultConfig) if (typeof config[key] == "undefined") config[key] = defaultConfig[key];
+
+    // set up the panzoom transform we're going to use
+    var svg = document.getElementById(config.svgID);
+    var panzoom = document.getElementById(config.panzoomID);
+    panzoom.transform.baseVal.appendItem(panzoom.transform.baseVal.createSVGTransformFromMatrix(svg.createSVGMatrix()));
+    var tf = panzoom.transform.baseVal.getItem(panzoom.transform.baseVal.numberOfItems - 1);
+    var tfMatrix = tf.matrix;
+
+    // mouse and touches state; this object will hold all the locations of touches / mouse, accessed by a touch ID
+    var ongoingTouches = {};
+
+    /* ===== functions for panning and zooming ===== */
+
+    // Convert screen-based coordinates (eg from mouse events) into the panzoom coordinate system
+    function screenToPanZoomCoords(x, y) {
+        var pt = svg.createSVGPoint();
+        pt.x = x;
+        pt.y = y;
+        return pt.matrixTransform(panzoom.getScreenCTM().inverse());
+    }
+
+    // pan the image a certain distance (from screen coords to screen coords)
+    function pan(xold, yold, xnew, ynew) {
+        var pt1 = screenToPanZoomCoords(xold, yold); // to make sure we always use the newest transform
+        var pt2 = screenToPanZoomCoords(xnew, ynew);
+        tfMatrix = tfMatrix.translate(pt2.x - pt1.x, pt2.y - pt1.y);
+        tf.setMatrix(tfMatrix);
+    }
+
+    // zoom the image at a certain x y location (in screen coordinates)
+    function zoom(x, y, factor) {
+        var pt = screenToPanZoomCoords(x, y);
+        tfMatrix = tfMatrix.translate(pt.x, pt.y).scale(factor).translate(-pt.x, -pt.y); // first translate x and y to origin, then zoom, then translate origin back to x y
+        tf.setMatrix(tfMatrix);
+    }
+
+    /* ===== functions for handling of events ===== */
+
+    // Calculate average point of ongoingTouches and the total distance from that point to touches; ongoingTouches must not be empty!
+    function touchLocationAndRadius() {
+        var x = 0, y = 0, rsquared = 0;
+        for (var key in ongoingTouches) {
+            x += ongoingTouches[key].x;
+            y += ongoingTouches[key].y;
+        }
+        x /= Object.keys(ongoingTouches).length; y /= Object.keys(ongoingTouches).length;
+        for (var key in ongoingTouches) rsquared += (ongoingTouches[key].x - x) * (ongoingTouches[key].x - x) + (ongoingTouches[key].y - y) * (ongoingTouches[key].y - y);
+        return {x: x, y: y, rsquared: rsquared};
+    }
+ 
+   // mousedown / touchstart handling: add item to ongoingTouches object
+    function down(evt) {
+       if (!evt.changedTouches) evt.changedTouches = [{identifier: "mouse", clientX: evt.clientX, clientY: evt.clientY}]; // make mouse event look like touch event
+       for (var i=0; i < evt.changedTouches.length; i++) ongoingTouches[evt.changedTouches[i].identifier] = {x: evt.changedTouches[i].clientX, y: evt.changedTouches[i].clientY};
+    }
+
+    // mousemove / touchmove handling
+    function move(evt) {
+
+        var touchIds = Object.keys(ongoingTouches);
+        if (touchIds.length == 0) return; // no touches going on / mouse not pressed
+
+        evt.preventDefault(); // no scrolling of whole webpage with fingers
+        if (!evt.changedTouches) evt.changedTouches = [{identifier: "mouse", clientX: evt.clientX, clientY: evt.clientY}]; // make mouse look like finger
+
+        if (touchIds.length == 1) { // just one finger or mouse => do panning
+            pan(ongoingTouches[touchIds[0]].x, ongoingTouches[touchIds[0]].y, evt.changedTouches[0].clientX, evt.changedTouches[0].clientY);
+            ongoingTouches[touchIds[0]].x = evt.changedTouches[0].clientX; // update touch info
+            ongoingTouches[touchIds[0]].y = evt.changedTouches[0].clientY;
+        } else { // multiple fingers => do panning and zooming
+            var oldGesture = touchLocationAndRadius(); // get old location and radius
+            for (var i=0; i < evt.changedTouches.length; i++) { // update touch info
+               ongoingTouches[evt.changedTouches[i].identifier].x = evt.changedTouches[i].clientX;
+               ongoingTouches[evt.changedTouches[i].identifier].y = evt.changedTouches[i].clientY;
+           }
+           var newGesture = touchLocationAndRadius(); // get new location and radius
+           pan(oldGesture.x, oldGesture.y, newGesture.x, newGesture.y); // first handle any panning
+           var z = Math.pow(newGesture.rsquared / oldGesture.rsquared, config.pinchSpeed); // find out how much we want to zoom
+           zoom(newGesture.x, newGesture.y, z); // and then zoom in
+        }
+    }
+
+    // mousewheel handling
+    function wheel(evt) {
+        var z = 1 + (0.01 * evt.deltaY / Math.abs(evt.deltaY)) * config.scrollSpeed; // calculate how much we want to scale
+        // the Math.abs is to deal with some nasty browser differences in deltaY numbers
+        zoom(evt.clientX, evt.clientY, z); // and then zoom in
+        evt.preventDefault(); // prevent scrolling of page
+    }
+
+    // mouseup / touchend handling
+    function up(evt) {
+        if (!evt.changedTouches) evt.changedTouches = [{identifier: "mouse"}]; // make mouse look like touch
+        for (var i=0; i < evt.changedTouches.length; i++) delete ongoingTouches[evt.changedTouches[i].identifier];
+    }
+
+    /* ===== registering event handlers ===== */
+    svg.addEventListener('mousedown', down);
+    svg.addEventListener('touchstart', down);
+    svg.addEventListener('mouseup', up);
+    svg.addEventListener('touchend', up);
+    svg.addEventListener('touchcancel', up);
+    svg.addEventListener('mouseleave', function(evt){ if (config.upOnMouseOut) return up(evt); });
+    svg.addEventListener('mousemove', move);
+    svg.addEventListener('touchmove', move);
+    // The "wheel" event is rather new, see if it works on some older browsers (IE9 comes to mind..)
+    svg.addEventListener('wheel', wheel);
+    svg.addEventListener('dragstart', function(evt) {evt.preventDefault(); }); // no dragging away svg elements please
+    svg.addEventListener('dragend', up); // in case some elements of the svg are in fact allowed to be dragged, prevent panning at dragend
+
+};
+
+addPanZoomToSVG({svgID: "svggraph", panzoomID: "svgpanzoom"});
+
+  ]]></script>
+</svg>
+
+    <div id="maincontainer">
+      <div id="sidebarcontainer"><a href="/" id="navigationlink"></a>
+      </div>
+      <div id="contentwrapper">
+        <div id="toppadding"></div>
+        <div id="contentcontainer"><h1 id="the-second-law-of-thermodynamics">The Second Law of Thermodynamics</h1>
+<p>Recently, I had an experience that can be rather unpleasant for anybody with a background in physics: I didn&#39;t understand why a &quot;free energy machine&quot; couldn&#39;t work, because I didn&#39;t completely understand/feel <a href="http://en.wikipedia.org/wiki/Second_law_of_thermodynamics">the second law of thermodynamics</a>. This is particularly annoying, because thermodynamics (TD) in general and the second law in particular is extremely important in physics. Many important physicists (and chemists as well) spent time working on TD and used it as a basis for their research. TD is so useful because it is a rather abstract framework, making it applicable to almost every real-life system. However, we must note that the second law of TD has no theoretical derivation: it is originally an empirical result. A very reasonable empirical result, and indeed also a very elegant empirical result, as it can be used to investigate everything from chemical reaction to black holes and even suggests a relation between entropy and &quot;the arrow of time&quot;. This has led many to believe that the second law of TD may in fact be a fundamental property of our universe, again a reasonable belief, because we have never seen violations of it, despite, for example, millions of years of evolution.</p>
+<p>So, if we don&#39;t understand something about the second law or if we cannot explain why a perpetuum mobile couldn&#39;t work, there&#39;s always some benefit of getting to the bottom of the situation. If we&#39;re lucky, we find situations in which the second law doesn&#39;t hold, which is important to know when trying to do physics in those situations and may allow us to understand the second law as an emergent property in large systems. For example, when we are studying one atom in quantummechanics, TD is clearly not the right tool because properties such as temperature are only defined when there&#39;s many particles. However, also in the (expected) case that the second law does hold up, we can gain valuable insights: following the second law, one can gain a better understanding of the microscopic processes that prevent a system from delivering the free energy.</p>
+<p>Thus, I started digging in literature and finally got a better grip on TD (about time, 6 years after my TD classes). I documented the results here so that other interested people will have an easier time, but also to make sure that I can continue my investigation later, even when I forget all this stuff (which I undoubtedly will). Unfortunately, I still don&#39;t understand enough to explain everything, so do expect a lot open ends: it&#39;s really quite amazing how quickly following the second law leads you to the edges of what we/you can explain!</p>
+<h2 id="ratchets">Ratchets</h2>
+<p>The class of machines that I have been looking at is those of the &quot;ratchets&quot;. They&#39;re called ratchets, because they&#39;re based on breaking symmetry, just like a ratchet does: it&#39;s easy to turn the ratchet in one direction, but very hard to turn it in the other direction. The reason such a ratchet can be imagined to generate &quot;free energy&quot; has to do with the so-called &quot;thermal equilibrium&quot;. One has to know that temperature is in fact related to the average movement of a large number of particles. As those particles are moving, they can exert a force and transfer energy to stuff that it comes in contact with. For example, when hot water comes into contact with cold metal, part of the energy in the movement of the water molecules will be transferred to the metal, so that the metal heats up and the water cools down. When a system is in thermal equilibrium, however, there is at each point just as much energy leaving that point as there&#39;s energy coming in (for &quot;large points&quot;, because its only true on average of course). So, in thermal equilibrium<sup>1</sup>, the transfer of energy is completely symmetric. </p>
+<p>Now, as I mentioned, one can use a ratchet to try to break that symmetry in thermal equilibrium. After all, that symmetry only exists on average; if we look at the level of particles, they are sometimes by chance moving all in the same direction, then some other time, by chance, moving in the other direction again. This effect is known as thermal noise, and is very well described by TD. So, to give the famous example of the <a href="http://en.wikipedia.org/wiki/Brownian_ratchet">Feynman-Smoluchowski ratchet</a> (invented by Smoluchowski, made famous by Feynman), image a paddle wheel in a chamber of gas, attached with an axle to a ratchet in another chamber. Because of the thermal noise in the gas chamber, the gas continuously exerts small forces on the paddle wheel. Because of the ratchet however, a force exerted in one way will result in the axle turning, while a force exerted the other way will not be able to turn the axle. We broke the symmetry of the thermal noise! Now we can for example put a rope around the axle and use its turning to lift a bucket.</p>
+<p>As you probably know, this is not allowed by the second law of TD, because we extract energy from a thermal equilibrium, do some work with it, and then we could simply let the system return to the same thermal equilibrium; thus, we would have made a perpetuum mobile! Nasty, right? Luckily, this paradox has a well-documented solution: there&#39;s not only thermal noise in the gas chamber, but also in the ratchet! Thus, the ratchet will fail continuously (note that the forces on the axle are miniscule, so that the ratchet must be very sensitive) and it is impossible to extract work form there. To prove that this is indeed the case is no simple endeavour though! Even Feynman himself apparently made an error in his derivations of this system in &#39;63 that was only corrected in the nineties (see the report by Reimann in the links, section 6.2)! By the way, note that this solution also means that work <em>can</em> be extracted if the ratchet and the gas chamber are <em>not</em> at the same temperature, with the ratchet surprisingly turning the wrong way in one of those two situations!</p>
+<h2 id="an-application-the-derricutt-ratchet">An Application: the Derricutt Ratchet</h2>
+<p>We learned a lot already, so let&#39;s try to apply this knowledge to a new ratchet, invented by <a href="http://revolution-green.com/author/simon-derricutt/">Simon Derricutt</a>. I was discussing this ratchet with him, and I could not really tell why I didn&#39;t expect it to work. We take a sheet of a very thin material, and make holes in it. However, we are careful that when we make the holes, the edges are bent inward to one side and slightly flexible (see the drawing). Now this foil is put into a gas chamber and the question is what would happen. If the edges of the holes where not flexible, clearly nothing would happen: the trajectories of the particles going from left to right are the same as the reverse, and the same number of particles pass through the holes at all times. But because the edges <em>are</em> supposed to work like a spring (they bend a little when a gas particle hits), there are actually more trajectories from the left to the right than from the right to the left, resulting in a pressure difference and movement of the foil!</p>
+<p><img class="normalimage" src="Gold-schem.png" alt="Drawing of the Derricutt Ratchet, courtesy Simon Derricutt" title="Drawing of the Derricutt Ratchet, courtesy Simon Derricutt"></p>
+
+<p>Let&#39;s see what we get if we make a parallel to the Feynman-Smoluchowski ratchet. Instead of one gas chamber, we now have two, but because we now assume the second law to hold, there is no pressure or temperature difference between those two compartments. Thus, the gases of the two ratchets are comparable. Then, it is also clear that the holes in the foil are analogous to the ratchet: it is the thing that breaks the symmetry in the thermal noise. And that means that TD makes a clear prediction: if the foil is colder than the gas, it will move in the intended direction, if it is warmer than the gas it will move in the other direction, but if the foil is at the same temperature of the gas, it will not move at all. </p>
+<p>Is this a reasonable or understandable prediction? If the foil is at absolute zero, the ratchet will work as expected, so that&#39;s allright. But what happens if the temperature of the foil increases? The molecules of the foil will gain kinetic energy and start vibrating; that&#39;s what temperature of a solid is in its simplest form. But as the edges of the holes were made flexible intentionally, those edges will start vibrating by themselves as well! In other words, the flexibility of the edges of the foil is a degree of freedom for the system, and this degree of freedom contains an amount of energy that is determined by the temperature. If the temperature of the gas is the same as the temperature of the foil, this degree of freedom contains the same amount of energy as the average kinetic energy that the particles have perpendicular to the foil (not coincidentally: every degree of freedom gets the same amount of energy). So while indeed some particles will pass through the funnel as intended, others will be stopped in their tracks by an edge that is just at that moment bouncing back. If TD is correct, all these probabilities even out precisely if the temperatures of foil and gas are equal. Maybe even more interesting is the final prediction from the second law: if the foil is warmer than the gas, the foil should be propelled in the opposite direction. In a very cold gas, that actually reminds me of swimming, but I don&#39;t really see how it could work. Perhaps there is even some concept of friction hidden in this ratchet?</p>
+<p>The above is clearly not an answer at all. However, it does give some intuition about the problem at hand, and at least for me it gives a reasonably plausible explanation for the ratchet not providing free energy (even though I cannot see it exactly yet). It also shows precisely how one would go about giving a definitive answer: you would have to make a good model of this system, including the vibrations of the foil, and actually calculate all those probabilities (or create an accurate simulation). Another approach is of course to build the system and test it. For the case in which the temperatures of the foil and the gas is the same, this is indeed possible (but one would have to be careful with sunlight for example). Testing the ratchet with different temperatures of gas and foil may be a bit more difficult, in particular if you want the foil to be colder than the gas. </p>
+<h2 id="the-rectifier-and-potential-energy">The Rectifier and Potential Energy</h2>
+<p>The system that I became interested in orginally was the rectifier, as a simplification of a &quot;solar panel&quot; for thermal (black body) radiation: I reckoned that if it would be possible for a solar panel at room temperature to extract electricty from mid-IR radiation, it would basically be a diode rectifying thermal fluctuations. It&#39;s not exactly the same, because a photovoltaic material is a good deal more complicated than a diode, but as I couldn&#39;t understand why the diode wouldn&#39;t generate electricity I found it a good place to start. By the way, note that some people are trying to build rectenna&#39;s for mid-IR radiation, which means those guys are <em>really</em> pushing the TD limits if they want to make those work at room temperature, as those things are basically working on the single photon level (so no averaging over time either) <sup>2</sup>. </p>
+<p>Back to the rectifier. The rectifier has in fact been proposed a long time ago by Leon Brillouin himself (Brillouin, Léon. &quot;Can the rectifier become a thermodynamical demon?.&quot; Physical Review 78.5 (1950): 627. Not available online unfortunately, but you can get the article from me if you&#39;re interested). The system is very simple: just attach a resistor to diode (see drawing below). As the electrons in the resistor can move and will contain some of the thermal energy in the system, a small, fluctuating eletric potential difference will be generated between the leads of the resistor. This type of thermal noise is called <a href="http://en.wikipedia.org/wiki/Johnson%E2%80%93Nyquist_noise">Johnson noise</a> and the voltage increases with the resistance and the temperature. The diode is then breaking the symmetry of the noise, or in electronics words, rectifying the signal. Just like with the Feynman-Smoluchowski ratchet, no current will flow when the temperature of the resistor and the diode are the same; the current will flow in the &quot;normal&quot; direction of the diode if the diode is colder than the resistor, and the current will reverse direction if the diode is warmer than the resistor. This has been verified experimentally by J B Gunn at IBM (from the Gunn diode), see <a href="http://www.neidenoff.com/mediapool/121/1215532/data/G4-Gunn.pdf">his first article</a>, and his second article that includes a plot (Gunn, J. B. (1969). &quot;Spontaneous Reverse Current Due to the Brillouin Emf in a Diode&quot;. Applied Physics Letters 14 (2): 54. Obtainable from me again).</p>
+<p><img class="normalimage" src="rectifier.png" alt="Rectifier circuit as drawn by Leon Brillouin" title="Rectifier circuit as drawn by Leon Brillouin"></p>
+
+<p>So there&#39;s potential energy in the system (a tiny amount of electrical energy in this case), but we cannot take it out! When using a simple P-N junction as your diode, this can be understood intuitively reasonably well, when you realize that the P-N junction is also a thermodynamic equilibrium: the charge carriers at the interface are continuously moving about thanks to their thermal energy, recombining, etc. Thus, when looking at this microscopic level, nothing in this equilibrium is actually breaking the symmetry at the energy levels of the thermal equilibrium! Only when applying larger voltages over the diode, the P-N junction will do its work as a rectifier. So, while I don&#39;t really have a full understanding yet here either (I think mainly because I don&#39;t fully understand the relation between the energy and the voltage of the Johnson noise yet), I can imagine that this system is fundamentally the same as the Feynman-Smoluchowski ratchet.</p>
+<h2 id="quantum-mechanics-">Quantum Mechanics?!</h2>
+<p>Of course, I next took refuge to Quantum Mechanics (QM) as something that is described particularly badly by TD. QM deals with single particles and very small systems, while TD is by design only valid for large systems. Thus, theoretically, one can escape the laws of TD by devising a system that is in fact a magnification of a QM effect to a macroscopic level. Now, I&#39;m quite sure that it won&#39;t be so easy practically, maybe even (theoretically?) impossible, but it&#39;s at least a tantalizing possibility, right? So, can we construct a diode using a QM effect? Well, indeed, we can, in the early days of electronics devices known as <a href="http://en.wikipedia.org/wiki/Tunnel_diode">tunnel diodes</a> showed quite some potential thanks to there very high switching frequencies, a &quot;negative resistance&quot; area, and longevity (eg when used in spacecraft). A tunnel diode is similar to a normal diode, but has different doping applied to obtain a reverse breakdown voltage of 0, but a barrier at a small forward bias<sup>3</sup>. </p>
+<p>When applying this small forward bias, electrons in the conduction band one the one side have the same energy as holes in the valence band on the other side, and the electrons can tunnel through the barrier, as described by QM. When increasing the bias further, the bands are not aligned anymore and the current decreases (the negative resistance region). When increasing the bias even further, the diode starts to conduct like a normal diode. So, these diodes should be able to break symmetry, thanks the QM effects at low bias voltages, avoiding the trap of relying on a TD equilibrium for the rectification. Unfortunately, I cannot yet explain why a ratchet with such a tunnel diode couldn&#39;t work. Naturel places to start further research would be to find out whether this system can <em>really</em> not be described as a TD equilibrium, to learn about the temperature dependence of tunneling (as the TD prediction would still be that there is a current when there&#39;s a temperature difference), and to find out about non-tunneling effects in eg MIM diodes (to prevent a too narrow search). </p>
+<h2 id="an-experiment">An Experiment</h2>
+<p>While I may be unable to explain the system theoretically, we can at least verify the depressing, universal truth of the second law experimentally. So, let&#39;s use one of those tunnel diodes instead of a regular diode next to a resistor and see what happens. Unfortunately, tunnel diodes require different manufacturing processes than MOSFETs and they were superceded by other devices, making them very expensive to buy new. Nevertheless, we can still buy old stock relatively cheaply and I already have an old Soviet tunnel diode (GI401A, a backward variant because I thought it would show a bigger asymmetry around 0 bias voltage). I hope to put it to the test soon and replicate the results by Gunn that I referenced earlier. I probably need to either build the circuit at a university to use their measuring equipment or spend some extra time to create a purpose-built circuit; measuring at very low voltages and currents is of course not straightforward. </p>
+<h2 id="would-you-like-gravy-with-your-ratchet-">Would You Like Gravy With Your Ratchet?</h2>
+<p>Yet another night spent thinking about this stuff, and I came up with a final ratchet. Note that in the rectifier ratchet, we try to extract the potential energy that is part of the thermal energy in the system. I still didn&#39;t really find out why that wouldn&#39;t be possible, so I thought about other forms of potential energy, such as gravitational energy. Gravity is an interesting thing, and its relation with TD is still a bit mysterious, even though the last couple of years have seen a lot of progress on this area. Let&#39;s first imagine a perfect gas, except that we don&#39;t neglect gravity. If it&#39;s hard to imagine, also assume that gravity is much stronger than it actually is, or that the &quot;perfect gas&quot; is a bunch of bouncing stars in a box. The whole thing is suspended in vacuum, so that we don&#39;t have gravitational effects from outside. Now, when the particles are moving towards the center of the box, their potential energy is turned into kinetic energy, and the average speed of the particles is higher in the center of the box than that it is on the edges of the box, suggesting a higher temperature in the middle of the box than at the edge. (First question: is this actually true? Something tells me it couldn&#39;t be.. How come we suddenly got rid of equipartition?)</p>
+<p>So, if that assessment is indeed right, we&#39;re in for a ride.. After all, we could then just put some heat engine between the center of the box and the edge of the box and extract as much energy as we want. However, note how I mentioned that it would be easier to imagine this with a much larger gravity. Thus, we may need to take into account relativistic effects to resolve this paradox. And if so, a thought experiment like this could be a good starting point for an attempt at deriving relativity from thermodynamics or to think about relativistic thermodynamics. These subjects have been discussed a lot in the last century, but are nevertheless still relevant, see for example the recent work on <a href="http://en.wikipedia.org/wiki/Entropic_gravity">Entropic Gravity</a>. As mentioned before, I actually think there may be an error already in the assumption that there is a temperature difference, but on the other hand, we do know that relativity and entropy have a rather special relation, and this paradox may well be an example of that relation.</p>
+<h2 id="footnotes">Footnotes</h2>
+<p><sup>1</sup> There&#39;s lots of interesting non-equilibrium TD as well, but we ignore it here. For our purpose, that is reasonable, because all systems tend to thermal equilibrium and usually reach it rather quickly (order of hours). An exception would for example be a chemical battery that keeps working for a couple of years, but we&#39;re not interested in batteries now.</p>
+<p><sup>2</sup> As a further interesting aside, a material covered with nantenna&#39;s tuned to the mid-IR would give an opportunity to an excellent TD-compliant &quot;free energy&quot; machine: a heat engine between outer space and the surface of the earth. The atmosphere is namely completely transparent to a range of mid-IR frequencies, known as the &quot;atmospheric window&quot;. Thus, such the nantenna material would radiate its heat energy away through the atmosphere, but receive almost no radiation back at those frequencies (space is quite cold). Thus, this stuff would cool down quite a bit, even in the middle of the day! Thus, you&#39;ll have an outer-space cooled fridge, that can generate electricty from the temperature difference to boot :-) Of course, this all will only be possible if we are able to make a material that is not only strongly coupling to those mid-IR frequencies but also reflecting most other frequencies. <a href="http://www.pnas.org/content/111/11/3927.full.pdf">Here&#39;s a good article in PNAS by Byrnes et al (2014)</a>. </p>
+<p><sup>3</sup> A newer variant of a tunnel diode is the Metal-Insulator-Metal diode, which is currently an active research area. In this variant, the barrier is made by an insulator and two metals with different work functions are selected. Thanks to the different Fermi energies, the barrier is smaller one way than it is the other way. Ideally I would use such a diode for my experiment, but they are not so easy to make.</p>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://secondlawoflife.wordpress.com/">John E.J. Schmitz</a> Blog by a chemist that wrote a book about the second law of TD.</li>
+<li><a href="http://arxiv.org/pdf/cond-mat/0010237.pdf">Peter Reimann: Brownian motors: noisy transport far from equilibrium, 2001</a> Must-read report reviewing all essential work on ratchets.</li>
+<li><a href="http://www.eoht.info/">Hmolpedia: Encyclopedia of Human Thermodynamics, Human Chemistry, and Human Physics</a> Ok, only tangentially relevant, but such a nice website that I had to include a link somewhere ;-)</li>
+</ul>
+
+        </div>
+        <div id="bottompadding"></div>
+      </div>
+    </div>
+    <!-- main javascript-->
+    <script src="/static/js/navigation.js"></script>
+    <!--script.-->
+    <!-- google analytics code, etc...-->
+  </body>
+</html>

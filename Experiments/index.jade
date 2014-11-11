@@ -1,0 +1,10 @@
+extends ../layouts/default
+
+block description
+  meta(name='description', content='Experiments in physics, chemistry and biology')
+
+block vars
+  - var pageTitle = 'Experiments'
+
+block content
+  include:md README.md

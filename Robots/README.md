@@ -55,3 +55,7 @@ I'm currently working on this robot. It's a robot inspired by running birds, and
 ## Dotty
 
 Worked on this robot when I was employed at DoBots, search [their website](http://www.dobots.nl) for more info.
+
+## Other People's Robots
+
+* [Bionic Bird](https://www.indiegogo.com/projects/bionic-bird-the-flying-app--2) Finally somebody that is trying to use shape-memory alloy (aka muscle wire) to build a flying robot! Hope they get it to work properly and don't have too large problems with warm weather and metal fatigue... Obviously, if they do get it to work properly, I'ld want to use the same system to build a lighter Ostrichbot!
