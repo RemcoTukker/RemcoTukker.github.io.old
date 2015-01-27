@@ -1,4 +1,4 @@
-# On Intelligence
+# On Intelligence [TO BE COMPLETED - MAY CONTAIN ERRORS!]
 
 Earlier this year I was given a wonderful present: the book On Intelligence by Jeff Hawkins. Reading through this book I encountered some of my own ideas about intelligence, many ideas that I agree with and some that I did not agree with at all. Interestingly, the book was published in 2004 and since that time, Jeff Hawkins has been trying to apply his ideas at his company, (Numenta)[http://numenta.com/]. Thus, we can already gain a little bit of hindsight on Jeffs ideas by investigating the functionality of Numentas product, Grok.
 

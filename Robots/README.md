@@ -47,15 +47,19 @@ In practice however, we have to admit that the stiltbot is actually three connec
 
 I'm currently working on this robot. It's a robot inspired by running birds, and I would like it to be a very light, small and cheap robot that nevertheless has full bipedal mobility: I want it to stand, walk, run, turn and get up in case it falls. All that with 6 to 8 servos. The feet (lower part of the leg of a bird is what is our foot) will be very similar to the stiltbot leg, except that it will have a foot to make my life a bit easier. The Ostrichbot leg will have an upper part as well. Then in the knee/hip joint there will be some more servos for pointing the leg in the right direction.
 
+At the moment, I have built a first version of this robot that can get up and walk. Maybe it can also run, but for turning it does not have the required degrees of freedom yet. It uses six servos and a full description of the robot can be found at [LetsMakeRobots.com](http://letsmakerobots.com/robot/project/ostrichbot-v1-construction-first-movements-first-steps) and some movies can be found on [YouTube](https://www.youtube.com/watch?v=-VxA9Z8dWo0). 
+
 ### Relevant links
 * Great video material of running ostrich: [University of Western Australia Muscle Function and Locomotion Lab](http://mfll-uwa.jonasrubenson.com/Comparative.html)
 * Some inspiration: [MIT Leg Lab Robots on Youtube](https://www.youtube.com/watch?v=vHjVV7AWaGM)
 * Bipedal running robot at university of Tokyo: [ACHIRES](http://www.k2.t.u-tokyo.ac.jp/fusion/BipedalRunning/)
+* IHMC ostrich inspired robot: [FastRunner](http://robots.ihmc.us/fastrunner/) Looks like they only have a simulation so far..
+* Some guy that has more or less the same goals as me, with excellent presentation of his robots: [Project Biped](http://www.projectbiped.com/home)
 
 ## Dotty
 
 Worked on this robot when I was employed at DoBots, search [their website](http://www.dobots.nl) for more info.
 
-## Other People's Robots
+## Other Links
 
-* [Bionic Bird](https://www.indiegogo.com/projects/bionic-bird-the-flying-app--2) Finally somebody that is trying to use shape-memory alloy (aka muscle wire) to build a flying robot! Hope they get it to work properly and don't have too large problems with warm weather and metal fatigue... Obviously, if they do get it to work properly, I'ld want to use the same system to build a lighter Ostrichbot!
+* [Self Stabilizing Prothese](http://www.imdi-sprint.nl/huidige-projecten/een-nieuwe-beenprothese-ter-verbetering-van-de-zijwaartse-balans-van-protheselopers/) Foot prothese for humans that has some mechanical system for lateral stabilization; might be interesting for robots too!

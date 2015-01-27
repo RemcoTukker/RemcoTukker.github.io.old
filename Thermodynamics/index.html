@@ -33,31 +33,43 @@
   </defs>
   <g mask="url(#Mask)" > 
    <g id="svgpanzoom" transform="matrix(1,0,0,1,200,300)" >
-    <g id="/Thermodynamics/" class="graphnode" transform="translate(62.36256834621664,6.522083582540807)" >
+    <g id="/Thermodynamics/" class="graphnode" transform="translate(57.80602246652037,24.577358822277652)" >
      <ellipse cx="0" cy="0" rx="90" ry="45" fill="url(#gradient1)" />
      <a xlink:href="/Thermodynamics/"> <text x="0" y="5" text-anchor="middle"> Thermodynamics</text> </a>
     </g>
-    <g id="/Scheduling/" class="graphnode" transform="translate(3.1100398010366224,101.86875247451867)" >
+    <g id="/Scheduling/" class="graphnode" transform="translate(-21.07386797104427,97.99802276791429)" >
      <ellipse cx="0" cy="0" rx="66" ry="45" fill="url(#gradient1)" />
      <a xlink:href="/Scheduling/"> <text x="0" y="5" text-anchor="middle"> Scheduling</text> </a>
     </g>
-    <g id="/SVGPanZoom/" class="graphnode" transform="translate(-95.22322046428617,45.80064383094631)" >
+    <g id="/SVGPanZoom/" class="graphnode" transform="translate(-95.73101267644206,52.214146198485146)" >
      <ellipse cx="0" cy="0" rx="78" ry="45" fill="url(#gradient1)" />
      <a xlink:href="/SVGPanZoom/"> <text x="0" y="5" text-anchor="middle"> SVG Pan Zoom</text> </a>
     </g>
-    <g id="/Robots/" class="graphnode" transform="translate(-39.08679241490602,-79.90232803814438)" >
+    <g id="/Robots/" class="graphnode" transform="translate(-88.40833031781092,-51.62321682436549)" >
      <ellipse cx="0" cy="0" rx="50" ry="45" fill="url(#gradient1)" />
      <a xlink:href="/Robots/"> <text x="0" y="5" text-anchor="middle"> Robots</text> </a>
     </g>
-    <g id="/Experiments/" class="graphnode" transform="translate(93.05133202884129,-52.19769654048426)" >
+    <g id="/OnIntelligence/" class="graphnode" transform="translate(59.87240122682789,-74.90232360652915)" >
+     <ellipse cx="0" cy="0" rx="96" ry="45" fill="url(#gradient1)" />
+     <a xlink:href="/OnIntelligence/"> <text x="0" y="5" text-anchor="middle"> On Intelligence</text> </a>
+    </g>
+    <g id="/Go/" class="graphnode" transform="translate(103.57792456518897,-15.906052857163)" >
+     <ellipse cx="0" cy="0" rx="72" ry="45" fill="url(#gradient1)" />
+     <a xlink:href="/Go/"> <text x="0" y="5" text-anchor="middle"> Computer Go</text> </a>
+    </g>
+    <g id="/Experiments/" class="graphnode" transform="translate(58.36764661459724,86.00150087805191)" >
      <ellipse cx="0" cy="0" rx="72" ry="45" fill="url(#gradient1)" />
      <a xlink:href="/Experiments/"> <text x="0" y="5" text-anchor="middle"> Experiments</text> </a>
     </g>
-    <g id="/AboutWebsite/" class="graphnode" transform="translate(-36.217357524978304,50.21101926693949)" >
+    <g id="/Evolution/" class="graphnode" transform="translate(-43.817176461893716,30.62300463155927)" >
+     <ellipse cx="0" cy="0" rx="60" ry="45" fill="url(#gradient1)" />
+     <a xlink:href="/Evolution/"> <text x="0" y="5" text-anchor="middle"> Evolution</text> </a>
+    </g>
+    <g id="/AboutWebsite/" class="graphnode" transform="translate(-23.600204987052468,-39.245815921357085)" >
      <ellipse cx="0" cy="0" rx="84" ry="45" fill="url(#gradient1)" />
      <a xlink:href="/AboutWebsite/"> <text x="0" y="5" text-anchor="middle"> About Website</text> </a>
     </g>
-    <g id="/AboutMe/" class="graphnode" transform="translate(-90.08675455924588,-28.487063137647326)" >
+    <g id="/AboutMe/" class="graphnode" transform="translate(-8.165903778241688,-99.12918326330225)" >
      <ellipse cx="0" cy="0" rx="54" ry="45" fill="url(#gradient1)" />
      <a xlink:href="/AboutMe/"> <text x="0" y="5" text-anchor="middle"> About Me</text> </a>
     </g>
@@ -336,7 +348,6 @@ addPanZoomToSVG({svgID: "svggraph", panzoomID: "svgpanzoom"});
 
   ]]></script>
 </svg>
-
     <div id="maincontainer">
       <div id="sidebarcontainer"><a href="/" id="navigationlink"></a>
       </div>
@@ -368,9 +379,12 @@ addPanZoomToSVG({svgID: "svggraph", panzoomID: "svgpanzoom"});
 <p>When applying this small forward bias, electrons in the conduction band one the one side have the same energy as holes in the valence band on the other side, and the electrons can tunnel through the barrier, as described by QM. When increasing the bias further, the bands are not aligned anymore and the current decreases (the negative resistance region). When increasing the bias even further, the diode starts to conduct like a normal diode. So, these diodes should be able to break symmetry, thanks the QM effects at low bias voltages, avoiding the trap of relying on a TD equilibrium for the rectification. Unfortunately, I cannot yet explain why a ratchet with such a tunnel diode couldn&#39;t work. Naturel places to start further research would be to find out whether this system can <em>really</em> not be described as a TD equilibrium, to learn about the temperature dependence of tunneling (as the TD prediction would still be that there is a current when there&#39;s a temperature difference), and to find out about non-tunneling effects in eg MIM diodes (to prevent a too narrow search). </p>
 <h2 id="an-experiment">An Experiment</h2>
 <p>While I may be unable to explain the system theoretically, we can at least verify the depressing, universal truth of the second law experimentally. So, let&#39;s use one of those tunnel diodes instead of a regular diode next to a resistor and see what happens. Unfortunately, tunnel diodes require different manufacturing processes than MOSFETs and they were superceded by other devices, making them very expensive to buy new. Nevertheless, we can still buy old stock relatively cheaply and I already have an old Soviet tunnel diode (GI401A, a backward variant because I thought it would show a bigger asymmetry around 0 bias voltage). I hope to put it to the test soon and replicate the results by Gunn that I referenced earlier. I probably need to either build the circuit at a university to use their measuring equipment or spend some extra time to create a purpose-built circuit; measuring at very low voltages and currents is of course not straightforward. </p>
+<p>After reading some papers (including <a href="http://mems.eng.usf.edu/pub/Papers/Subb-2.pdf">this one</a> by Krishnan, Stefanakos and Bhansali in Thin Solid Films, 2008), I now have a slightly better understanding of the effects that we would be after. When electrons escape from a material, they also have to end up somewhere. The process can be described mathematically, depending on where the electrons actually end up. Let&#39;s consider the simple case of a MIM diode with vacuum as its insulator. If the electron tunnels from one metal directly to the other metal, this is referred to in literature as &quot;direct tunneling&quot;. I think this process has to be symmetric with respect to offset voltage (check this sometime!), and is thus of no use for a rectifier and the direct tunneling current should be kept as small as possible (by making the insulater think enough, current falls of exponentially with insulator thickness IIRC). However, in the presence of an electric field, the electron can also end up in the insulater and then make its way further to the other metal. The escape process is called Fowler-Nordheim tunneling (<a href="http://en.wikipedia.org/wiki/Field_electron_emission">Relevant wikipedia article</a>) and is basically tunneling through a triangular barrier. Thus, the question then becomes whether Fowler-Nordheim tunneling is giving a non-neglible contribution to the current in a MIM diode close to zero bias. Now, that&#39;s finally something that can be investigated without too much trouble, even though very sophisticated equipment would be necessary (similar to equipment used for STM and MIM diode fabrication and characterization).</p>
 <h2 id="would-you-like-gravy-with-your-ratchet-">Would You Like Gravy With Your Ratchet?</h2>
-<p>Yet another night spent thinking about this stuff, and I came up with a final ratchet. Note that in the rectifier ratchet, we try to extract the potential energy that is part of the thermal energy in the system. I still didn&#39;t really find out why that wouldn&#39;t be possible, so I thought about other forms of potential energy, such as gravitational energy. Gravity is an interesting thing, and its relation with TD is still a bit mysterious, even though the last couple of years have seen a lot of progress on this area. Let&#39;s first imagine a perfect gas, except that we don&#39;t neglect gravity. If it&#39;s hard to imagine, also assume that gravity is much stronger than it actually is, or that the &quot;perfect gas&quot; is a bunch of bouncing stars in a box. The whole thing is suspended in vacuum, so that we don&#39;t have gravitational effects from outside. Now, when the particles are moving towards the center of the box, their potential energy is turned into kinetic energy, and the average speed of the particles is higher in the center of the box than that it is on the edges of the box, suggesting a higher temperature in the middle of the box than at the edge. (First question: is this actually true? Something tells me it couldn&#39;t be.. How come we suddenly got rid of equipartition?)</p>
-<p>So, if that assessment is indeed right, we&#39;re in for a ride.. After all, we could then just put some heat engine between the center of the box and the edge of the box and extract as much energy as we want. However, note how I mentioned that it would be easier to imagine this with a much larger gravity. Thus, we may need to take into account relativistic effects to resolve this paradox. And if so, a thought experiment like this could be a good starting point for an attempt at deriving relativity from thermodynamics or to think about relativistic thermodynamics. These subjects have been discussed a lot in the last century, but are nevertheless still relevant, see for example the recent work on <a href="http://en.wikipedia.org/wiki/Entropic_gravity">Entropic Gravity</a>. As mentioned before, I actually think there may be an error already in the assumption that there is a temperature difference, but on the other hand, we do know that relativity and entropy have a rather special relation, and this paradox may well be an example of that relation.</p>
+<p>Yet another night spent thinking about this stuff, and I came up with a final ratchet. Note that in the rectifier ratchet, we try to extract the potential energy that is part of the thermal energy in the system. I still didn&#39;t really find out why that wouldn&#39;t be possible, so I thought about other forms of potential energy, such as gravitational energy. Gravity is an interesting thing, and its relation with TD is still a bit mysterious, even though the last couple of years have seen a lot of progress on this area. Let&#39;s first imagine a perfect gas, except that we don&#39;t neglect gravity. If it&#39;s hard to imagine, also assume that gravity is much stronger than it actually is, or that the &quot;perfect gas&quot; is a bunch of bouncing stars in a box. The whole thing is suspended in vacuum, so that we don&#39;t have gravitational effects from outside. Basically we&#39;re talking about the Giant Molecular Clouds, in which stars are born (which is triggered by external shockwaves and so on, and then proceeds with nuclear fusion; the galaxy is <em>very</em> far away from TD equilibrium). </p>
+<p>So, at first I thought that particles would move faster in the center of the cloud because of the energy they gain from falling to the center. However, what would actually happen is that the number of particles simply increases in the center (higher pressure), but the temperature should be the same everywhere. I&#39;ll have to check the mathematics. Anyway, this system may be an interesting way to start thinking about relativistic thermodynamics, as gravity plays an important role in them. These subjects have been discussed a lot in the last century, but are nevertheless still relevant, see for example the recent work on <a href="http://en.wikipedia.org/wiki/Entropic_gravity">Entropic Gravity</a>. </p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Starting from TD we made our way to QM and maybe even gravity. In case the entropy is indeed a governing principle of the universe, it may in fact be possible to derive useful properties of QM and relativity using thought experiments such as those presented above. If entropy is not a governing principle of the universe, on the other hand, we should be able to precisely specify the conditions for the second law of TD to hold (and thus, also how to get around it). Both cases look like very interesting research to me!</p>
 <h2 id="footnotes">Footnotes</h2>
 <p><sup>1</sup> There&#39;s lots of interesting non-equilibrium TD as well, but we ignore it here. For our purpose, that is reasonable, because all systems tend to thermal equilibrium and usually reach it rather quickly (order of hours). An exception would for example be a chemical battery that keeps working for a couple of years, but we&#39;re not interested in batteries now.</p>
 <p><sup>2</sup> As a further interesting aside, a material covered with nantenna&#39;s tuned to the mid-IR would give an opportunity to an excellent TD-compliant &quot;free energy&quot; machine: a heat engine between outer space and the surface of the earth. The atmosphere is namely completely transparent to a range of mid-IR frequencies, known as the &quot;atmospheric window&quot;. Thus, such the nantenna material would radiate its heat energy away through the atmosphere, but receive almost no radiation back at those frequencies (space is quite cold). Thus, this stuff would cool down quite a bit, even in the middle of the day! Thus, you&#39;ll have an outer-space cooled fridge, that can generate electricty from the temperature difference to boot :-) Of course, this all will only be possible if we are able to make a material that is not only strongly coupling to those mid-IR frequencies but also reflecting most other frequencies. <a href="http://www.pnas.org/content/111/11/3927.full.pdf">Here&#39;s a good article in PNAS by Byrnes et al (2014)</a>. </p>
@@ -380,6 +394,8 @@ addPanZoomToSVG({svgID: "svggraph", panzoomID: "svgpanzoom"});
 <li><a href="https://secondlawoflife.wordpress.com/">John E.J. Schmitz</a> Blog by a chemist that wrote a book about the second law of TD.</li>
 <li><a href="http://arxiv.org/pdf/cond-mat/0010237.pdf">Peter Reimann: Brownian motors: noisy transport far from equilibrium, 2001</a> Must-read report reviewing all essential work on ratchets.</li>
 <li><a href="http://www.eoht.info/">Hmolpedia: Encyclopedia of Human Thermodynamics, Human Chemistry, and Human Physics</a> Ok, only tangentially relevant, but such a nice website that I had to include a link somewhere ;-)</li>
+<li><a href="http://www.gellerlabs.com/JCan%20Parts%20and%20Kits.htm">Geller Labs</a> DIY circuit for measuring Johnson noise.</li>
+<li>[]</li>
 </ul>
 
         </div>
