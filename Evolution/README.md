@@ -49,6 +49,6 @@ Finally, as has been noted many times by researchers, there should be genotype /
 
 ## Interesting links
 
-[The Hitch-Hiker's Guide to Evolutionary Computation](http://www.cse.dmu.ac.uk/~rij/gafaq/top.htm)
-[Push](http://faculty.hampshire.edu/lspector/push.html): a language specifically designed for genetic programming (with a tree representation)
-
+* [The Hitch-Hiker's Guide to Evolutionary Computation](http://www.cse.dmu.ac.uk/~rij/gafaq/top.htm)
+* [Push](http://faculty.hampshire.edu/lspector/push.html): a language specifically designed for genetic programming (with a tree representation)
+* [Slash/A](https://github.com/arturadib/Slash-A): a language specifically designed for linear genetic programming

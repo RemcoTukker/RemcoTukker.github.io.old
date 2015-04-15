@@ -1,6 +1,6 @@
 # Remco Tukker
 
-Available for new projects from January 2015!
+Available for new projects!
 
 ### Contact
 

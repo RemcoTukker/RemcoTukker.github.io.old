@@ -1,0 +1,41 @@
+extends ../layouts/default
+
+block description
+  meta(name='description', content='Non-Photorealistic Rendering Experiments')
+
+block vars
+  - var pageTitle = 'Non-Photorealistic Rendering'
+
+block content
+
+  // first I wanted to take youtube movies, but that is not possible just yet (due to cross domain stuff). However, if you hack the youtube player scripts in just the right way,
+  //  and upload those edited scripts somewhere on youtube (some video description for example), you can extract the required information (the src from the video tag) and 
+  //  use that to embed the video file properly. If that doesnt work (depends on YT servers accepting CORS), its still possible to serialize all data and do a postmessage.
+  //  that may be slow though (but who knows? maybe ok)
+  // However, thats a project for another time, as that player is quite large (mostly fluff thats not really necessary probably), for now just use an example and local files
+
+  // todo: align this next to eachother in a prettier way
+  video(id='source', src='YosemiteWonders_Excerpt.ogv', controls, width='40%')
+  canvas(id='output')
+  br
+
+  input(id='demoFile', type='button', value='Demo Clip')
+  input(id='webcam', type='button', value='Webcam')
+  // input(id='images', type='file', accept='image/*')
+  input(id='localFiles', type='file', accept='video/*')
+
+  br
+
+  // | parameter 1:
+  // input(id="slider1", type ="range", min ="0", max="3.0", step ="0.1")
+
+  include:md README.md
+
+  script(src="StackBlur.js")
+  script(src="copyVid.js")
+
+  //  include ../../SVGPanZoom/SVGPanZoom.js
+  // Dependency! The includes go to my local SVGPanZoom repo. TODO: would be much better to pull from the github repo
+
+  //script.
+  //  addPanZoomToSVG({svgID: "svgtiger", panzoomID: "tigerpanzoom"});
